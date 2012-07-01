@@ -8,7 +8,11 @@ This is an open source implementation of micro blog. It can also be written as @
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+AtMars, as a implementation of micro blog, has several functions as following:
+  * Standard *Publish* of micro blog
+  * *Forward* and *Comment* submission of micro blog
+  * *Followers* and *Followings* function
+  * *Face* emotion of micro blog
+  * *Photo* submission of micro blog
+  * *Location* of HTML5 Navigator
+  * *Mail* Validation
