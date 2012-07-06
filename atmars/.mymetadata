@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="atmars"
+  id="myeclipse.1336569134857"
+  context-root="/atmars"
+  j2ee-spec="6.0"
+  archive="atmars.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
