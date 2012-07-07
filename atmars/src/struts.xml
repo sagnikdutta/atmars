@@ -2,248 +2,127 @@
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 <struts>
 	<package name="default" extends="json-default">
-		<action name="start" class="org.atmars.action.UserAction">
-			<result name="notlogged">login.jsp</result>
-			<result name="logged">update.jsp</result>
-		</action>
-		<action name="googlePosition" class="org.atmars.action.homeAction" method=" googlePosition">
+
+
+
+		<action name="myFollowers" class="org.atmars.action.UserDetailAction"
+			method="myFollowers">
 			<result name="success">
-				getPosition.jsp
+				wodefensi.jsp
 			</result>
 		</action>
-		<action name="email_occupied" class="org.atmars.action.UserAction" method="email_occupied">
-			<result name="not_occupied">email_not_occupied.jsp</result>
-			<result name="occupied">email_occupied.jsp</result>
-		</action>
-		<action name="nickname_occupied" class="org.atmars.action.UserAction" method="nickname_occupied">
-			<result name="not_occupied">email_not_occupied.jsp</result>
-			<result name="occupied">email_occupied.jsp</result>
-		</action>
-		<action name="chaFensi" class="org.atmars.action.homeAction" method="chaFensi">
-			<result name="success">
-				following.jsp
-			</result>
-		</action>
-		<action name="search" class="org.atmars.action.homeAction" method="search">
+		<action name="search" class="org.atmars.action.UserDetailAction"
+			method="search">
 			<result name="success">
 				search.jsp
 			</result>
 		</action>
-		
-		<action name="wodeguanzhu" class="org.atmars.action.homeAction" method="wodeguanzhu">
+
+		<action name="myFollowings" class="org.atmars.action.UserDetailAction"
+			method="wodeguanzhu">
 			<result name="success">
-				followers.jsp
+				wodeguanzhu.jsp
+			</result>
+		</action>
+
+
+		<action name="publish" class="org.atmars.action.SendMessageAction">
+			<result name="success" type="json">
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+
+		<action name="forward" class="org.atmars.action.SendMessageAction">
+			<result name="success" type="json">
+				<param name="excludeNullProperties">true</param>
 			</result>
 		</action>
 		
-		<action name="fasong" class="org.atmars.action.homeAction" method="execute_sendMessage">
+		<action name="init_weiboQiang" class="org.atmars.action.GetMessageAction"
+			method="weiboQiang">
 			<result name="success" type="json">
 				<param name="excludeProperties">
-					webRootPath,
-					m_service,
-					u_service,
-					myMessages,
-					not_original,
-					new_Messages,
-					qiangCount,
 					oldest_message_id,
-					latitude,
-					longitude,
-					source_id,
-					text,
-
-					currentNewestMessageId,
-					upload,
-					uploadFileName,
-					uploadContentType,
-					imageURI,
-					session,
-					newestMessage_Now,
-					current_usr_from_session,
-					messageid,
-					comments,
-					hotTopics,
-					position,
-					fensi,
-					ganzhuderen,
-					search
-				</param>
-				<param name="excludeNullProperties">true</param>
-			</result>		
-		</action>
-		
-		
-		
-		<action name="zhuanfa" class="org.atmars.action.homeAction" method="execute_zhuanfa">
-			<result name="success">zhuanfa_success.jsp</result>
-		</action>
-		<action name="init_weiboQiang" class="org.atmars.action.homeAction"
-			method="init_weiboQiang">
-			<result name="success" type="json">
-				<param name="excludeProperties">
-					webRootPath,
-					m_service,
-					u_service,
 					myMessages,
-					not_original,
-
-					qiangCount,
-					oldest_message_id,
-					latitude,
-					longitude,
-					source_id,
-					text,
-					lastPost,
 					currentNewestMessageId,
-					upload,
-					uploadFileName,
-					uploadContentType,
-					imageURI,
-					session,
-					newestMessage_Now,
-					current_usr_from_session,
-					messageid,
-					comments,
-					hotTopics,
-					position,
-					fensi,
-					ganzhuderen,
-					search
+					newestMessage_Now
 				</param>
 				<param name="excludeNullProperties">true</param>
 			</result>
 		</action>
-		<action name="getNewestMessage" class="org.atmars.action.homeAction"
-			method="getNewestMessage">
+		<action name="getNewestMessage" class="org.atmars.action.GetMessageAction"
+			method="execute_getNewestMessage">
 			<result name="error">getNewestMessage_error.jsp</result>
 			<result name="success" type="json">
 				<param name="excludeProperties">
-					webRootPath,
-					m_service,
-					u_service,
-					myMessages,
-					not_original,
-					new_Messages,
-					qiangCount,
 					oldest_message_id,
-					latitude,
-					longitude,
-					source_id,
-					text,
-					lastPost,
-					currentNewestMessageId,
-					upload,
-					uploadFileName,
-					uploadContentType,
-					imageURI,
-					session,
-
-					current_usr_from_session,
-					messageid,
-					comments,
-					hotTopics,
-					position,
-					fensi,
-					ganzhuderen
+					myMessages,
+					new_Messages,
+					currentNewestMessageId
 				</param>
 				<param name="excludeNullProperties">true</param>
 			</result>
 		</action>
-		<action name="performLogin" class="org.atmars.action.UserAction"
-			method="performLogin">
-			<result name="login_success" type="redirect">homepage.jsp</result>
-			<result name="login_fail">login.jsp</result>
-		</action>
-		<action name="getMyMessages" class="org.atmars.action.homeAction"
-			method="execute_getMessages">
+
+		<action name="getMyMessages" class="org.atmars.action.GetMessageAction"
+			method="execute_getMyMessages">
 			<result name="success" type="json">
 				<param name="excludeProperties">
-					webRootPath,
-					m_service,
-					u_service,
-
-					new_Messages,
-					qiangCount,
 					oldest_message_id,
-					latitude,
-					longitude,
-					source_id,
-					text,
-					lastPost,
+					new_Messages,
 					currentNewestMessageId,
-					upload,
-					uploadFileName,
-					uploadContentType,
-					imageURI,
-					session,
-					newestMessage_Now,
-					current_usr_from_session,
-					messageid,
-					comments,
-					hotTopics,
-					position,
-					fensi,
-					ganzhuderen
-				</param>
+					newestMessage_Now
+				</param>	
 				<param name="excludeNullProperties">true</param>
 			</result>
 			<result name="error">get_my_Message_error.jsp</result>
 		</action>
+
+
+		<!-- get start, login or check update or register -->
+
+		<action name="start" class="org.atmars.action.UserAction">
+			<result name="notlogged">login.jsp</result>
+			<result name="logged">update.jsp</result>
+		</action>
+
 		<action name="performRegister" class="org.atmars.action.UserAction"
 			method="performRegister">
 			<result name="input">input.jsp</result>
 			<result name="register_success" type="redirect">login.jsp</result>
 		</action>
+
+		<action name="performLogin" class="org.atmars.action.UserAction"
+			method="performLogin">
+			<result name="login_success" type="redirect">homepage.jsp</result>
+			<result name="login_fail">login.jsp</result>
+		</action>
+
+		<!-- get google position -->
+
+		<action name="googlePosition" class="org.atmars.action.GooglePosition">
+			<result name="success">
+				getPosition.jsp
+			</result>
+		</action>
+
+		<!-- register check -->
+		<action name="email_occupied" class="org.atmars.action.RegisterCheckAction"
+			method="email_occupied">
+			<result name="success" type="json">
+				<param name="includeProperties">
+					occupied
+				</param>
+			</result>
+		</action>
+		<action name="nickname_occupied" class="org.atmars.action.RegisterCheckAction"
+			method="nickname_occupied">
+			<result name="success" type="json">
+				<param name="includeProperties">
+					occupied
+				</param>
+			</result>
+		</action>
+
 	</package>
 </struts>
-<!-- 
-
-
-
-
-
-
-
-
-
-<param name="excludeProperties">
-					webRootPath,
-					m_service,
-					u_service,
-					myMessages,
-					not_original,
-					new_Messages,
-					qiangCount,
-					oldest_message_id,
-					latitude,
-					longitude,
-					source_id,
-					text,
-					lastPost,
-					currentNewestMessageId,
-					upload,
-					uploadFileName,
-					uploadContentType,
-					imageURI,
-					session,
-					newestMessage_Now,
-					current_usr_from_session,
-					messageid,
-					comments,
-					hotTopics,
-					position,
-					fensi,
-					ganzhuderen
-				</param>
-				<param name="excludeNullProperties">true</param>
-
-
-
-
-
-
-
-
-
-
- -->

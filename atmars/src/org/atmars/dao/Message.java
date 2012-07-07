@@ -12,6 +12,18 @@ public class Message implements java.io.Serializable {
 
 	// Fields
 
+
+	private Message orignal=null;
+	
+	
+	public Message getOrignal() {
+		return orignal;
+	}
+
+	public void setOrignal(Message orignal) {
+		this.orignal = orignal;
+	}
+
 	private Integer messageId;
 	private User user;
 	private String text;

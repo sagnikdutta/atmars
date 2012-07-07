@@ -30,6 +30,9 @@ public class UserDAO extends HibernateDaoSupport {
 	public static final String GENDER = "gender";
 	public static final String IMAGE = "image";
 	public static final String PRIORITY = "priority";
+	public static final String FOLLOWER_COUNT = "followerCount";
+	public static final String FOLLOWING_COUNT = "followingCount";
+	public static final String POST_COUNT = "postCount";
 
 	protected void initDao() {
 		// do nothing
@@ -117,6 +120,18 @@ public class UserDAO extends HibernateDaoSupport {
 
 	public List findByPriority(Object priority) {
 		return findByProperty(PRIORITY, priority);
+	}
+
+	public List findByFollowerCount(Object followerCount) {
+		return findByProperty(FOLLOWER_COUNT, followerCount);
+	}
+
+	public List findByFollowingCount(Object followingCount) {
+		return findByProperty(FOLLOWING_COUNT, followingCount);
+	}
+
+	public List findByPostCount(Object postCount) {
+		return findByProperty(POST_COUNT, postCount);
 	}
 
 	public List findAll() {

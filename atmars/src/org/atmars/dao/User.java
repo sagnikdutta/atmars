@@ -20,57 +20,37 @@ public class User implements java.io.Serializable {
 	private String image;
 	private Integer priority;
 	private Date time;
+	private Integer followerCount;
+	private Integer followingCount;
+	private Integer postCount;
 	private Set messages = new HashSet(0);
 	private Set followsForFollowingId = new HashSet(0);
 	private Set comments = new HashSet(0);
 	private Set favorites = new HashSet(0);
 	private Set followsForFollowedId = new HashSet(0);
 
-	
-	private int followingsCount;
-	private int followedCount;
-	private int postCount;
 	// Constructors
-
-	public int getFollowingsCount() {
-		return followingsCount;
-	}
-
-	public void setFollowingsCount(int followingsCount) {
-		this.followingsCount = followingsCount;
-	}
-
-	public int getFollowedCount() {
-		return followedCount;
-	}
-
-	public void setFollowedCount(int followedCount) {
-		this.followedCount = followedCount;
-	}
-
-	public int getPostCount() {
-		return postCount;
-	}
-
-	public void setPostCount(int postCount) {
-		this.postCount = postCount;
-	}
 
 	/** default constructor */
 	public User() {
 	}
 
 	/** minimal constructor */
-	public User(String email, String password, String nickname, boolean gender) {
+	public User(String email, String password, String nickname, boolean gender,
+			Integer followerCount, Integer followingCount, Integer postCount) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
 		this.gender = gender;
+		this.followerCount = followerCount;
+		this.followingCount = followingCount;
+		this.postCount = postCount;
 	}
 
 	/** full constructor */
 	public User(String email, String password, String nickname, boolean gender,
-			String image, Integer priority, Date time, Set messages,
+			String image, Integer priority, Date time, Integer followerCount,
+			Integer followingCount, Integer postCount, Set messages,
 			Set followsForFollowingId, Set comments, Set favorites,
 			Set followsForFollowedId) {
 		this.email = email;
@@ -80,6 +60,9 @@ public class User implements java.io.Serializable {
 		this.image = image;
 		this.priority = priority;
 		this.time = time;
+		this.followerCount = followerCount;
+		this.followingCount = followingCount;
+		this.postCount = postCount;
 		this.messages = messages;
 		this.followsForFollowingId = followsForFollowingId;
 		this.comments = comments;
@@ -151,6 +134,30 @@ public class User implements java.io.Serializable {
 
 	public void setTime(Date time) {
 		this.time = time;
+	}
+
+	public Integer getFollowerCount() {
+		return this.followerCount;
+	}
+
+	public void setFollowerCount(Integer followerCount) {
+		this.followerCount = followerCount;
+	}
+
+	public Integer getFollowingCount() {
+		return this.followingCount;
+	}
+
+	public void setFollowingCount(Integer followingCount) {
+		this.followingCount = followingCount;
+	}
+
+	public Integer getPostCount() {
+		return this.postCount;
+	}
+
+	public void setPostCount(Integer postCount) {
+		this.postCount = postCount;
 	}
 
 	public Set getMessages() {
