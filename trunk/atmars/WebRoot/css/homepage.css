@@ -266,14 +266,23 @@ li{
 	border-radius:5px;
 	box-shadow:0 1px 3px rgba(0,0,0,0.35);
 }
+
+#publish_image_close{
+	background-color:#FFFFFF;
+	width:20px;
+	height:20px;
+	right:2px;
+	margin-top:2px;
+	float:right;
+}
 #preview_image{
 	padding:5px 5px 5px 5px;
 }
 
 #publish_location{
 	float:left;
-	width:200px;
-	height:140px;
+	width:220px;
+	height:240px;
 	display:none;
 	z-index:100;
 	position:absolute;

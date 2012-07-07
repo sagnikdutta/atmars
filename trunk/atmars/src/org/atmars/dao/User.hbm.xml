@@ -29,7 +29,16 @@
             <column name="priority" />
         </property>
         <property name="time" type="timestamp">
-            <column name="time" length="19" />
+            <column name="time" length="0" />
+        </property>
+        <property name="followerCount" type="integer">
+            <column name="followerCount" not-null="true" />
+        </property>
+        <property name="followingCount" type="integer">
+            <column name="followingCount" not-null="true" />
+        </property>
+        <property name="postCount" type="integer">
+            <column name="postCount" not-null="true" />
         </property>
         <set name="messages" inverse="true">
             <key>

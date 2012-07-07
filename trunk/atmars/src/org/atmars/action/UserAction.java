@@ -63,39 +63,7 @@ public class UserAction extends ActionSupport {
 	//}
 	
 	
-	public String nickname_occupied()
-	{
-		webRootPath = ServletActionContext.getServletContext()
-				.getRealPath("/");
-
-		Resource res = new FileSystemResource(webRootPath
-				+ "WEB-INF\\applicationContext.xml");
-		XmlBeanFactory factory = new XmlBeanFactory(res);
-	    usr_serv = (UserService) factory.getBean("userService");
-	    List l = usr_serv.getUserDAO().findByNickname(this.nickname);
-	    
-	    if(l==null||l.size()==0)
-	    {
-	    	return "not_occupied";
-	    }
-	    return "occupied";
-	}
-	public String email_occupied()
-	{
-		webRootPath = ServletActionContext.getServletContext()
-				.getRealPath("/");
-
-		Resource res = new FileSystemResource(webRootPath
-				+ "WEB-INF\\applicationContext.xml");
-		XmlBeanFactory factory = new XmlBeanFactory(res);
-	    usr_serv = (UserService) factory.getBean("userService");
-	    List l = usr_serv.getUserInfoByEmail(this.email);
-	    if(l==null||l.size()==0)
-	    {
-	    	return "not_occupied";
-	    }
-	    return "occupied";
-	}
+	
 	public String execute() {
 		webRootPath = ServletActionContext.getServletContext()
 				.getRealPath("/");

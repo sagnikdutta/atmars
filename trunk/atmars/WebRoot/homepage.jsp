@@ -51,9 +51,9 @@ $(function () {
         <img src="homepage-img/homelogo.png" height="34" width="100" />
       </div>
        <ul class="list">
-           <li><a href="C:\Users\quanshuo\Desktop\dream\homepage.html" class="gbgt current" style="color:#fff; padding-left:5px" > Homepage </a></li>
+           <li><a href="homepage.jsp" class="gbgt current" style="color:#fff; padding-left:5px" > Homepage </a></li>
            <li>
-              <a href="search?queryString=cloudzfy" class="gbgt" style="color:#fff; padding-left:15px" >
+              <a href="search" class="gbgt" style="color:#fff; padding-left:15px" >
               Search
               </a>
            </li>
@@ -90,7 +90,7 @@ $(function () {
            </a>
          </div>
          <div style="float:left; margin-left:10px; margin-top:10px;">
-           <a href="javascript:void(0);" id="image_button" onClick="image_file.click()">
+           <a href="javascript:void(0);" id="image_button">
              <img id="image_img" src="homepage-img/image_0.png">
            </a>
          </div>
@@ -111,14 +111,17 @@ $(function () {
 	    		reader.onload = function(e){
 					$("#preview_image").attr("src",null);
 					upload_img = e.target.result;
+					var tmp = new Image();
+					tmp.setAttribute("src",e.target.result);
 					$("#preview_image").attr("src",e.target.result).load(function() {
-						var a =$("#preview_image").width();
-                        if(this.width<400){
-							$("#publish_image").width(this.width+10);
-							$("#publish_image").height(this.height+10);
+                        if(tmp.width<400){
+							$("#publish_image").width(tmp.width+10);
+							$("#publish_image").height(tmp.height+10);
+							$("#preview_image").width(tmp.width);
+							$("#preview_image").height(tmp.height);
 						} else {
 							$("#publish_image").width(400);
-							$("#publish_image").height(400*this.height/this.width);
+							$("#publish_image").height(400*tmp.height/tmp.width);
 							$("#preview_image").width(390);
 							$("#preview_image").height($("#publish_image").height()-10);
 						}
@@ -126,6 +129,17 @@ $(function () {
     			}
     			reader.readAsDataURL(file);  
     		}
+			$("#image_button").click(function(e) {
+                if(upload_filename == "null") {
+					image_file.click();
+				} else {
+					$("#image_img").attr("src","homepage-img/image_0.png");
+					upload_filename = "null";
+					$("#image_file").attr("value","");
+					$("#preview_image").width(null);
+					$("#preview_image").height(null);
+				}
+            });
 		</script>
          </div>
          <div style="float:right">
@@ -191,7 +205,6 @@ $(function () {
    var oldest_message_id = 9999999;
    function pageRefresh(){
 	   $.get("getMyMessages.action?oldest_message_id=" + oldest_message_id,null,function(response){
-				   //var response = JSON.parse(result);
 				   var myMsg = response.myMessages;
 				   var not_original = response.not_original;
 				   for(var i = 0; i<myMsg.length; i++){
@@ -246,7 +259,7 @@ $(function () {
        <div class="attention">
           <ul>
              <li>
-               <a href="chaFensi" style="text-decoration: none !important; ">
+               <a href="myFollowings" style="text-decoration: none !important; ">
                <strong>
                2
                </strong>
@@ -256,7 +269,7 @@ $(function () {
                </a>
              </li>
              <li>
-                <a href="wodeguanzhu" style="text-decoration: none !important">
+                <a href="myFollowers" style="text-decoration: none !important">
                 <strong>
                 5
                 </strong>
@@ -266,7 +279,7 @@ $(function () {
                 </a>
              </li>
              <li>
-                <a href="javascript:void(0);" style="text-decoration: none !important">
+                <a href="myPosts" style="text-decoration: none !important">
                 <strong>
                 12
                 </strong>
@@ -336,35 +349,39 @@ $(function () {
 				</script>
        </div>
        <div id="publish_image">
-       <img id="preview_image" />
+       <div style="width:100%; z-index:300; position:absolute">
+	       <div id="publish_image_close">
+           	<a href="javascript:void(0);"><img src="homepage-img/close.png" /></a>
+           </div>
+       </div>
+       <div style="z-index:250; position:absolute">
+	       <img id="preview_image" />
+       </div>
        	<script type="text/javascript">
-		var isClick = false;
-		var isExisted = false;
 		$("#image_file").change(function(event){
+			$("#publish_image_close").click(function(e) {
+                $("#publish_image").fadeOut(700);
+            });
 			$("#publish_image").css("left",$("#image_button").offset().left);
 			$("#publish_image").css("top",$("#image_button").offset().top+$("#image_button").height());
 			$("#image_img").attr("src","homepage-img/image_1.png");
 			$("#publish_image").fadeIn(700);
-			isClick = true;
-			isExisted = true;
 		});
 		$("body").click(function(event){
 					if($("#publish_image").css("display")=="block"
 					&&(event.clientX<$("#publish_image").offset().left||event.clientX>$("#publish_image").offset().left+$("#publish_image").width()
 					||event.clientY<$("#publish_image").offset().top||event.clientY>$("#image_button").offset().top+$("#image_button").height())){
-						if(!isClick){
-							$("#publish_image").fadeOut(700);
-						} else {
-							isClick = false;
-						}
+						$("#publish_image").fadeOut(700);
 					}
 				});
 		</script>
        </div>
        <div id="publish_location">
-       <div style="float:left; margin-left:15px; margin-top:5px;"><img src="homepage-img/mark.png"></div>
-       <div style="float:left; margin-top:15px;"><p style="font-size:24px">Location</p></div>
-       <div style="float:left; margin-left:5px; margin-right:5px;"><p style="font-size:16px;" id="positionInfo"></p></div>
+       <div style="float:left; margin-left:10px; margin-top:10px; width:200px; height:200px; display:table-cell; vertical-align:middle; text-align: center">
+       	<img id="google_map" src="homepage-img/loader.gif" />
+       </div>
+       <div style="float:left; margin-left:10px"><img src="homepage-img/mark.png" /></div>
+       <div style="float:left; margin-left:5px"><p style="font-size:16px;" id="positionInfo"></p></div>
        	<script type="text/javascript">
 		var isClick = false;
 		var isLocation = false;
@@ -401,6 +418,7 @@ $(function () {
 			}
 			function show_map(position) {
 				var coords = position.coords;
+				$("#google_map").attr("src","http://maps.google.com/maps/api/staticmap?center=" + coords.latitude + "," + coords.longitude + "&zoom=12&size=200x200&maptype=roadmap&markers=color:red%7Clabel:A%7C" + coords.latitude + "," + coords.longitude + "&sensor=false");
 				$.get("googlePosition.action?latitude="+coords.latitude+"&longitude="+coords.longitude,null,function(result){
 					var response = JSON.parse(result);
 					document.getElementById("positionInfo").textContent = response.results[0].address_components[1].long_name + ", " + response.results[0].address_components[2].long_name;

@@ -71,10 +71,10 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(encryptedPassword);
 		user.setNickname(nickname);
 		user.setGender(gender);
-		System.out.println(user.getEmail());
-		System.out.println(user.getPassword());
-		System.out.println(user.getNickname());
-		System.out.println(user.getGender());
+		user.setFollowerCount(0);
+		user.setFollowingCount(0);
+		user.setPostCount(0);
+
 		userDAO.save(user);
 		User u = (User) userDAO.findByExample(user).get(0);
 		Follow f = new Follow();
