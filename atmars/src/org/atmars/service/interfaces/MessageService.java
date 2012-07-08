@@ -13,8 +13,7 @@ public interface MessageService {
 	
 	public Message sendMessage(Integer userid, String text, String image, String position, int source);
 	public Message getSingleMessage(Integer id);
-	public void sendComment(Integer userid, Integer messageid, String text);
-	public Set<Comment> getComment(Integer messageid);
+	public Comment sendComment(Integer userid, Integer messageid, String text);
 	public List<Message> searchMessage(Integer userid, String query);
 	public void addFavoriteMessage(Integer userid, Integer messageid);
 	public List<Topic> getHotTopic();
@@ -22,5 +21,5 @@ public interface MessageService {
 	public List getMessage(int intValue);
 	public List findNewestMessageS();
 	public MessageDAO getMessageDAO();
-	//public void removeFavoriteMessage(Integer user_id, Integer message_id);
+	List<Comment> getComment(int messageId, int cursor);
 }

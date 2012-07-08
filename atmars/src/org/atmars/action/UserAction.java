@@ -27,13 +27,7 @@ import org.springframework.core.io.Resource;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class UserAction extends ActionSupport {
-
-	/**
-	 * 
-	 */
-
-	private static final long serialVersionUID = 1L;
+public class UserAction extends BaseAction {
 
 	private File upload;
 	private String uploadFileName;
@@ -48,30 +42,8 @@ public class UserAction extends ActionSupport {
 	private int user_id;
 	private int his_id;
 	
-	private UserService usr_serv;
-	private String webRootPath;
-	
-	
-	
-
-	//public String findFollowings()
-	//{
-	//	Session s = usr_serv.getFollowDAO().getSessionFactory().openSession();
-	//	String queryString = "from Follow where "
-	//	Query q =  s.createQuery(arg0)
-		
-	//}
-	
-	
-	
 	public String execute() {
-		webRootPath = ServletActionContext.getServletContext()
-				.getRealPath("/");
-
-		Resource res = new FileSystemResource(webRootPath
-				+ "WEB-INF\\applicationContext.xml");
-		XmlBeanFactory factory = new XmlBeanFactory(res);
-	    usr_serv = (UserService) factory.getBean("userService");
+		super.InitAction();
 		ActionContext ctx = ActionContext.getContext();
 		Map session = ctx.getSession();
 		if (session.get("user") == null) {
@@ -82,30 +54,24 @@ public class UserAction extends ActionSupport {
 
 	public String performRegister() throws IOException {
 		
-		webRootPath = ServletActionContext.getServletContext()
-				.getRealPath("/");
-
-		Resource res = new FileSystemResource(webRootPath
-				+ "WEB-INF\\applicationContext.xml");
-		XmlBeanFactory factory = new XmlBeanFactory(res);
-	    usr_serv = (UserService) factory.getBean("userService");
-	    
+		super.InitAction();
+		
 		User u = new User();
 		boolean avalible = true;
-		Integer usr_id = (Integer) usr_serv.getId(this.email);
+		Integer usr_id = (Integer) u_service.getId(this.email);
 		if(usr_id!=null)
 		{
 			avalible= false;
 		}
-		List l = usr_serv.getUserDAO().findByNickname(this.nickname);
+		List l = u_service.getUserDAO().findByNickname(this.nickname);
 		if(l!=null&&l.size()>0)
 		{
 			avalible= false;
 		}
 		if (avalible) {
-			usr_serv.register(email, password, nickname, gender);
+			u_service.register(email, password, nickname, gender);
 			System.out.println(this.gender);
-			u = (User) usr_serv.getUserInfoByEmail(this.email).get(0);
+			u = (User) u_service.getUserInfoByEmail(this.email).get(0);
 			u.setImage("image\\default.jpg");
 			System.out.println("the user get");
 			System.out.println(u.getUserId());
@@ -137,7 +103,7 @@ public class UserAction extends ActionSupport {
 			} else {
 				u.setImage("image/default.png");
 			}
-			usr_serv.updateUserInfo(u);
+			u_service.updateUserInfo(u);
 
 			ActionContext ctx = ActionContext.getContext();
 			Map session = ctx.getSession();
@@ -145,40 +111,34 @@ public class UserAction extends ActionSupport {
 
 			return "register_success";
 		}
-		System.out.println("return error");
 		return "error";
 	}
 
 	public String performLogin() {
-		webRootPath = ServletActionContext.getServletContext()
-				.getRealPath("/");
-
-		Resource res = new FileSystemResource(webRootPath
-				+ "WEB-INF\\applicationContext.xml");
-		XmlBeanFactory factory = new XmlBeanFactory(res);
+		
+		super.InitAction();
+		
 		ActionContext ctx = ActionContext.getContext();
 		Map session = ctx.getSession();
-	    usr_serv = (UserService) factory.getBean("userService");
-		if (usr_serv.checkLogin(this.email, this.password)) {
-			User u = (User) usr_serv.getUserInfoByEmail(this.email).get(0);
+		
+		if (u_service.checkLogin(this.email, this.password)) {
+			User u = (User) u_service.getUserInfoByEmail(this.email).get(0);
 			session.put("user", u);		
 			return "login_success";
 		}
+		
 		String errorString="Sorry, the account with\n this keycode was not found.";
 		session.put("error", errorString);		
 		return "login_fail";
 	}
 
 	public String Add_follow() {
-		webRootPath = ServletActionContext.getServletContext()
-				.getRealPath("/");
-
-		Resource res = new FileSystemResource(webRootPath
-				+ "WEB-INF\\applicationContext.xml");
-		XmlBeanFactory factory = new XmlBeanFactory(res);
-	    usr_serv = (UserService) factory.getBean("userService");
-		usr_serv.addFollowing(this.user_id, this.his_id);
+		
+		super.InitAction();
+		
+		u_service.addFollowing(this.user_id, this.his_id);
 		return "add_follow_success";
+		
 	}
 
 	public String getEmail() {

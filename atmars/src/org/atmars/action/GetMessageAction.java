@@ -20,15 +20,7 @@ import org.springframework.core.io.Resource;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class GetMessageAction extends ActionSupport {
-
-	
-	private static final long serialVersionUID = 1L;
-	private String webRootPath=null;
-	private MessageService m_service=null;
-	private UserService u_service=null;
-	private User current_usr_from_session=null;
-	
+public class GetMessageAction extends BaseAction {
 	
 	//get my messages
 	//action form field
@@ -42,7 +34,7 @@ public class GetMessageAction extends ActionSupport {
 	private ArrayList<Message> new_Messages=null;
 	
 	//get one newest message
-	private int currentNewestMessageId;
+	private int currentNewestMessageId=-1;
 	private Message newestMessage_Now=null;
 	
 	
@@ -70,15 +62,22 @@ public class GetMessageAction extends ActionSupport {
 
 		InitAction();
 
-		if (currentNewestMessageId == -1) {
-			return "error";
-		}
-
 		List l = m_service.findNewestMessageS();
+		
+		//there is no message
 		if (l == null || l.size() == 0) {
-			return "false";
+			newestMessage_Now = new Message();
+			newestMessage_Now.setUser(null);
+			newestMessage_Now.setComments(null);
+			newestMessage_Now.setFavorites(null);
+			newestMessage_Now.setNewestState(false);
+			
+			return "success";
 		}
+		
 		Message m = (Message) l.get(0);
+		
+		//if there is a new message
 		if (m.getMessageId() > currentNewestMessageId) {
 			newestMessage_Now = m;
 			newestMessage_Now.setUser(m.getUser());
@@ -95,9 +94,17 @@ public class GetMessageAction extends ActionSupport {
 			String text2 = m.getText();
 			String text3 = FaceServiceImpl.replaceFace(text2);
 			newestMessage_Now.setText(text3);
+			newestMessage_Now.setNewestState(true);
 			return "success";
 		}
-		return "error";
+		//there is no newest message
+		newestMessage_Now = new Message();
+		newestMessage_Now.setUser(null);
+		newestMessage_Now.setComments(null);
+		newestMessage_Now.setFavorites(null);
+		newestMessage_Now.setNewestState(false);
+		
+		return "success";
 	}
 	
 	
@@ -154,7 +161,7 @@ public class GetMessageAction extends ActionSupport {
 			String text3 = FaceServiceImpl.replaceFace(text2);
 			m.setText(text3);
 			
-			m.setOrignal(null);
+			m.setOriginal(null);
 			myMessages.add(m);
 			i++;
 		}
@@ -175,24 +182,14 @@ public class GetMessageAction extends ActionSupport {
 					String text2 = m2.getText();
 					String text3 = FaceServiceImpl.replaceFace(text2);
 					m2.setText(text3);
-					m.setOrignal(m2);
+					m.setOriginal(m2);
 				} 
 			}
 		}
 		return "success";
 	}
 	
-	private void InitAction() {
-		webRootPath = ServletActionContext.getServletContext().getRealPath("/");
-		Resource res = new FileSystemResource(webRootPath
-				+ "WEB-INF\\applicationContext.xml");
-		XmlBeanFactory factory = new XmlBeanFactory(res);
-		m_service = (MessageService) factory.getBean("messageService");
-		u_service = (UserService) factory.getBean("userService");
-		ActionContext ctx = ActionContext.getContext();
-		Map<String, Object> session = ctx.getSession();
-		current_usr_from_session = (User) session.get("user");
-	}
+	
 
 	public int getOldest_message_id() {
 		return oldest_message_id;

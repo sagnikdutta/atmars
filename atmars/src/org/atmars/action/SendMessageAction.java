@@ -21,18 +21,7 @@ import sun.misc.BASE64Decoder;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class SendMessageAction extends ActionSupport {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	private String webRootPath = null;
-	private MessageService m_service = null;
-	private UserService u_service = null;
-	private User current_usr_from_session = null;
-	
+public class SendMessageAction extends BaseAction{
 	
 	private String text;
 	private int messageid=-1;
@@ -41,21 +30,9 @@ public class SendMessageAction extends ActionSupport {
 	private String uploadFileName;
 	private String imageURI;
 	
-	
-
+	//return lastPost;
 	private Message lastPost=null;
 	
-	private void InitAction() {
-		webRootPath = ServletActionContext.getServletContext().getRealPath("/");
-		Resource res = new FileSystemResource(webRootPath
-				+ "WEB-INF\\applicationContext.xml");
-		XmlBeanFactory factory = new XmlBeanFactory(res);
-		m_service = (MessageService) factory.getBean("messageService");
-		u_service = (UserService) factory.getBean("userService");
-		ActionContext ctx = ActionContext.getContext();
-		Map<String, Object> session = ctx.getSession();
-		current_usr_from_session = (User) session.get("user");
-	}
 	@Override
 	public String execute() {
 		InitAction();
@@ -87,11 +64,23 @@ public class SendMessageAction extends ActionSupport {
 		lastPost.getUser().setMessages(null);
 		lastPost.setComments(null);
 		lastPost.setFavorites(null);
+		
 		String timedes = TimeServiceImpl.getTimeDelay(lastPost.getTime());
 		lastPost.setTimeDescription(timedes);
 		String text2 = FaceServiceImpl.replaceFace(lastPost.getText());
 		lastPost.setText(text2);
 		
+		if(lastPost.getSourceId()!=-1)
+		{
+			Message original = m_service.getSingleMessage(lastPost.getSourceId());
+			
+			original.setTimeDescription(TimeServiceImpl.getTimeDelay(original.getTime()));
+			original.setText(FaceServiceImpl.replaceFace(original.getText()));
+			
+			original.setComments(null);
+			original.setFavorites(null);
+			lastPost.setOriginal(original);
+		}
 		
 		return "success";
 	}
@@ -141,12 +130,16 @@ public class SendMessageAction extends ActionSupport {
 	public void setText(String text) {
 		this.text = text;
 	}
+	
+
 	public int getMessageid() {
 		return messageid;
 	}
+
 	public void setMessageid(int messageid) {
 		this.messageid = messageid;
 	}
+
 	public String getPosition() {
 		return position;
 	}
