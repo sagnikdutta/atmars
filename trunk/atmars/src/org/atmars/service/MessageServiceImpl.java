@@ -1,5 +1,6 @@
 package org.atmars.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -88,6 +89,7 @@ public class MessageServiceImpl implements MessageService {
 		}
 
 		Message m = (Message) l.get(0);
+		m.setOriginal(null);
 		return m;
 	}
 
@@ -130,18 +132,64 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public void sendComment(Integer userid, Integer messageid, String text) {
+	public Comment sendComment(Integer userid, Integer messageid, String text) {
+		
 		Comment comment = new Comment();
 		comment.setUser(userDAO.findById(userid));
 		comment.setMessage(messageDAO.findById(messageid));
 		comment.setText(text);
+		comment.setTime(new Date());
 		commentDAO.save(comment);
+		
+		Comment c = (Comment) commentDAO.getHibernateTemplate().findByExample(comment).get(0);
+		
+		c.setUser(userDAO.findById(c.getUser().getUserId()));
+		c.getUser().setComments(null);
+		c.getUser().setFavorites(null);
+		c.getUser().setFollowsForFollowedId(null);
+		c.getUser().setFollowsForFollowingId(null);
+		c.getUser().setMessages(null);
+		c.getUser().setPassword(null);
+		
+		c.setMessage(null);
+		
+		return c;
 	}
 
-	@Override
-	public Set<Comment> getComment(Integer messageid) {
-		return messageDAO.findById(messageid).getComments();
+	@Override 
+	public List<Comment> getComment(int messageId,int cursor)
+	{
+		String queryString=null;
+		List<Comment> comments = new ArrayList<Comment>();
+		if(cursor==-1)
+		{
+			queryString = "from Comment c where c.message.messageId="+String.valueOf(messageId);
+		}else
+		{
+			queryString= "from Comment c where c.message.messageId="+String.valueOf(messageId)+" and c.commentId<"+String.valueOf(cursor);
+		}
+		Session s = commentDAO.getHibernateTemplate().getSessionFactory().openSession();
+		Query q = s.createQuery(queryString);
+		q.setMaxResults(10);
+		List l = q.list();
+		for(Object o:l)
+		{
+			Comment c = (Comment) o;
+			c.setMessage(null);
+			c.setUser(userDAO.findById(c.getUser().getUserId()));
+			c.setText(FaceServiceImpl.replaceFace(c.getText()));
+			c.getUser().setComments(null);
+			c.getUser().setFavorites(null);
+			c.getUser().setFollowsForFollowedId(null);
+			c.getUser().setFollowsForFollowingId(null);
+			c.getUser().setMessages(null);
+			comments.add(c);
+		}
+		s.close();
+		
+		return comments;
 	}
+	
 
 	@Override
 	public Message getSingleMessage(Integer id) {
@@ -203,8 +251,7 @@ public class MessageServiceImpl implements MessageService {
 
 	@Override
 	public List<Topic> getHotTopic() {
-		return topicDAO.getHibernateTemplate().find(
-				"from Topic t order by t.count desc");
+		return topicDAO.getHibernateTemplate().find("from Topic t order by t.count desc");
 	}
 
 	@Override

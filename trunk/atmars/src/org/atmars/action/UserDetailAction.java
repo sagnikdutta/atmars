@@ -16,12 +16,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 
-public class UserDetailAction extends ActionSupport {
-	
-	private String webRootPath=null;
-	private MessageService m_service=null;
-	private UserService u_service=null;
-	private User current_usr_from_session=null;
+public class UserDetailAction extends BaseAction {
 	
 	
 	private ArrayList<User> search=null;
@@ -30,7 +25,6 @@ public class UserDetailAction extends ActionSupport {
 	private ArrayList<User> ganzhuderen=null;
 	
 	private ArrayList<User> wodefensi=null;
-	
 	
 	public String search() {
 		InitAction();
@@ -105,17 +99,6 @@ public class UserDetailAction extends ActionSupport {
 		return "success";
 	}
 	
-	private void InitAction() {
-		webRootPath = ServletActionContext.getServletContext().getRealPath("/");
-		Resource res = new FileSystemResource(webRootPath
-				+ "WEB-INF\\applicationContext.xml");
-		XmlBeanFactory factory = new XmlBeanFactory(res);
-		m_service = (MessageService) factory.getBean("messageService");
-		u_service = (UserService) factory.getBean("userService");
-		ActionContext ctx = ActionContext.getContext();
-		Map<String, Object> session = ctx.getSession();
-		current_usr_from_session = (User) session.get("user");
-	}
 
 	public ArrayList<User> getSearch() {
 		return search;

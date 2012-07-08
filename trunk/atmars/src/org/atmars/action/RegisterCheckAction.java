@@ -10,15 +10,7 @@ import org.springframework.core.io.Resource;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-public class RegisterCheckAction extends ActionSupport {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private String webRootPath=null;
-	private UserService usr_serv;
-	
+public class RegisterCheckAction extends BaseAction {
 	
 	//action form field
 	private String nickname;
@@ -27,14 +19,8 @@ public class RegisterCheckAction extends ActionSupport {
 	
 	public String nickname_occupied()
 	{
-		webRootPath = ServletActionContext.getServletContext()
-				.getRealPath("/");
-
-		Resource res = new FileSystemResource(webRootPath
-				+ "WEB-INF\\applicationContext.xml");
-		XmlBeanFactory factory = new XmlBeanFactory(res);
-	    usr_serv = (UserService) factory.getBean("userService");
-	    List l = usr_serv.getUserDAO().findByNickname(this.nickname);
+		super.InitAction();
+	    List l = u_service.getUserDAO().findByNickname(this.nickname);
 	    
 	    if(l==null||l.size()==0)
 	    {
@@ -47,14 +33,8 @@ public class RegisterCheckAction extends ActionSupport {
 	
 	public String email_occupied()
 	{
-		webRootPath = ServletActionContext.getServletContext()
-				.getRealPath("/");
-
-		Resource res = new FileSystemResource(webRootPath
-				+ "WEB-INF\\applicationContext.xml");
-		XmlBeanFactory factory = new XmlBeanFactory(res);
-	    usr_serv = (UserService) factory.getBean("userService");
-	    List l = usr_serv.getUserInfoByEmail(this.email);
+		super.InitAction();
+	    List l = u_service.getUserInfoByEmail(this.email);
 	    if(l==null||l.size()==0)
 	    {
 	    	occupied=false;

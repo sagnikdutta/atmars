@@ -13,15 +13,27 @@ public class Message implements java.io.Serializable {
 	// Fields
 
 
-	private Message orignal=null;
+	private Message original=null;
 	
 	
-	public Message getOrignal() {
-		return orignal;
+	public Message getOriginal() {
+		return original;
 	}
 
-	public void setOrignal(Message orignal) {
-		this.orignal = orignal;
+	public void setOriginal(Message original) {
+		this.original = original;
+	}
+
+	private boolean NewestState=true;
+	
+	
+
+	public boolean getNewestState() {
+		return NewestState;
+	}
+
+	public void setNewestState(boolean newestState) {
+		NewestState = newestState;
 	}
 
 	private Integer messageId;
