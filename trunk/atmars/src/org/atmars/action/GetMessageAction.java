@@ -41,7 +41,7 @@ public class GetMessageAction extends BaseAction {
 	public String weiboQiang() {
 		InitAction();
 		int qiangCount = 0;
-		List l = m_service.findNewestMessagesFromAllUsers();
+		List l = m_service.findNewestMessageS();
 		new_Messages = new ArrayList<Message>();
 		while (l != null && qiangCount < l.size()) {
 			Message m = (Message) l.get(qiangCount);
@@ -59,8 +59,10 @@ public class GetMessageAction extends BaseAction {
 	}
 
 	public String execute_getNewestMessage() {
+
 		InitAction();
-		List l = m_service.findNewestMessagesFromAllUsers();
+
+		List l = m_service.findNewestMessageS();
 		
 		//there is no message
 		if (l == null || l.size() == 0) {
@@ -87,7 +89,6 @@ public class GetMessageAction extends BaseAction {
 			newestMessage_Now.getUser().setFollowsForFollowingId(null);
 			newestMessage_Now.getUser().setMessages(null);
 			newestMessage_Now.getUser().setPassword(null);
-			
 			String timeDescription = TimeServiceImpl.getTimeDelay(m.getTime());
 			newestMessage_Now.setTimeDescription(timeDescription);
 			String text2 = m.getText();
@@ -113,9 +114,16 @@ public class GetMessageAction extends BaseAction {
 		if (current_usr_from_session == null) {
 			return "error";
 		}
-		List l = m_service.getUpdates(current_usr_from_session.getUserId()
-					.intValue(), oldest_message_id);
+		List l = null;
 		
+		if (oldest_message_id == -1) {
+			l = m_service.getMessage(current_usr_from_session.getUserId()
+					.intValue());
+		} else {
+			l = m_service.getMessage(current_usr_from_session.getUserId()
+					.intValue(), oldest_message_id);
+		}
+
 		myMessages = new ArrayList<Message>();
 		int i = 0;
 		while (l != null && i < l.size()) {
@@ -142,8 +150,6 @@ public class GetMessageAction extends BaseAction {
 			m.setPosition((String) properties[5]);
 			m.setSourceId((Integer) properties[6]);
 			m.setCommentCount((Integer) properties[7]);
-			m.setForwardCount((Integer) properties[8]);
-			
 			m.setComments(null);
 			m.setFavorites(null);
 			m.setFavorites(null);

@@ -19,28 +19,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="js/jquery.insertContent.js"></script>
 <script type="text/javascript" src="js/maxlength.js"></script>
 
-<script>
-function Sync(){
-	document.all.conr.style.height=document.all.conl.offsetHeight+"px";
-	pageRefresh();
-}
-</script>
-<script type="text/javascript">
-$(function () {
-	$("#publish_text").maxlength({
-		'feedback': '#letter_num',
-		'useInput': true
-	});
-	$("#forward_text").maxlength({
-		'feedback': '#forward_letter_num',
-		'useInput':true
-	});
-	$("#comment_text").maxlength({
-		'feedback': '#comment_letter_num',
-		'useInput':true
-	});
-});
-</script>
 </head>
 <body onLoad="Sync()">
 
@@ -101,89 +79,12 @@ $(function () {
          </div>
          <div style="float:left;">
            <input id="image_file" type="file" accept="image/*" style="visibility:collapse" onchange="handleFiles(this.files)" />
-           <script type="text/javascript">
-		   var upload_img = "null";
-		   var upload_filename = "null";
-		    function handleFiles(files){
-				var file = files[0];
-				upload_filename = files[0].name;
-	    		var reader = new FileReader();  
-	    		reader.onload = function(e){
-					$("#preview_image").attr("src",null);
-					upload_img = e.target.result;
-					var tmp = new Image();
-					tmp.setAttribute("src",e.target.result);
-					$("#preview_image").attr("src",e.target.result).load(function() {
-                        if(tmp.width<400){
-							$("#publish_image").width(tmp.width+10);
-							$("#publish_image").height(tmp.height+10);
-							$("#preview_image").width(tmp.width);
-							$("#preview_image").height(tmp.height);
-						} else {
-							$("#publish_image").width(400);
-							$("#publish_image").height(400*tmp.height/tmp.width);
-							$("#preview_image").width(390);
-							$("#preview_image").height($("#publish_image").height()-10);
-						}
-                    });
-    			}
-    			reader.readAsDataURL(file);  
-    		}
-			$("#image_button").click(function(e) {
-                if(upload_filename == "null") {
-					image_file.click();
-				} else {
-					$("#image_img").attr("src","homepage-img/image_0.png");
-					upload_filename = "null";
-					upload_img = "null";
-					$("#image_file").attr("value","");
-					$("#preview_image").width(null);
-					$("#preview_image").height(null);
-				}
-            });
-		</script>
          </div>
          <div style="float:right">
            <input type="button" id="submit" value="Publish" onClick="publish()" />
          </div>
        </div>
      </form>
-      <script type="text/javascript">
-	  function publish(){
-		  $.post("publish.action",{"messageid":"-1","text":$("#publish_text").val(),"position":$("#positionInfo").text(),"upload":upload_img,"uploadFileName":upload_filename},function(result){
-			  var str = '<dt class="face"><a href="javascript:void(0);"><img src="';
-			  if(result.lastPost.user.image!=null){
-					str = str + result.lastPost.user.image;
-				}else{
-					 str = str + 'homepage-img/upimg.png';
-				 }
-					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="javascript:void(0);" class="author_name">' + result.lastPost.user.nickname + '</a>:&nbsp;' + result.lastPost.text + '</p>';
-					   if(result.lastPost.image!=null){
-						   str = str + '<p><div style="margin-left:10px; margin-top:5px;"><img src="' + result.lastPost.image + '" style="width:300px"></div></p>';
-					   }
-					   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="comment(this.name)">Comment</a></span>' + result.lastPost.timeDescription + '&nbsp;&nbsp;&nbsp;';
-					   if(result.lastPost.position!=null && result.lastPost.position!=""){
-						   str = str + 'From ' + result.lastPost.position;
-					   }
-					   str = str + '</p></dd>';
-					   var i = document.createElement("dl");
-					   i.className="feed_list";
-					   i.innerHTML=str;
-					   var mainlist = document.getElementById("mainlist");
-					   mainlist.insertBefore(i,mainlist.firstChild);
-					   $("#publish_text").val("");
-					   $("#image_img").attr("src","homepage-img/image_0.png");
-					   upload_filename = "null";
-					   upload_img = "null";
-					   $("#image_file").attr("value","");
-					   $("#preview_image").width(null);
-					   $("#preview_image").height(null);
-					   $("#location_img").attr("src","homepage-img/location_0.png");
-					   $("#positionInfo").text("");
-					   isLocation = false;
-		  });
-	  }
-	  </script>
        </div>
        <div style="width:553px; height:3px; background-color:#EAEDEE; float:left; margin-left:15px; margin-top:20px; margin-bottom:20px"></div>
           <div id="mainlist">
@@ -191,83 +92,6 @@ $(function () {
           <div id="loading_div" class="loading_div">
           	<img src="homepage-img/loading.gif">&nbsp;&nbsp;Loading&nbsp;...
           </div>
-   <script type="text/javascript">
-   function forward(id){
-	   $("#back_div").height($(document.body).height());
-	   $("#back_div").width($(document.body).width());
-	   $("#back_div").fadeIn(700);
-	   $("#forward_div").fadeIn(700);
-	   $("#forward_div").css("left",document.body.scrollLeft+(window.screen.availWidth-442)/2);
-	   $("#forward_div").css("top",document.body.scrollTop+(window.screen.availHeight-290)/2);
-	   $("#forward_message_id").val(id);
-	   $("#forward_text").val("Fw: ");
-   }
-   
-   function closing(){
-	   $("#back_div").fadeOut(700);
-	   $("#forward_div").fadeOut(700);
-   }
-   $(window).scroll(function(e) {
-	   if(document.body.scrollTop+window.screen.availHeight>=document.body.scrollHeight){
-		   pageRefresh();	   
-	   }
-   });
-   var oldest_message_id = 9999999;
-   function pageRefresh(){
-	   $.get("getMyMessages.action?oldest_message_id=" + oldest_message_id,null,function(response){
-		   $("#loading_div").css("display","block");
-				   var myMsg = response.myMessages;
-				   if(myMsg == null || myMsg.length == 0)
-				   {
-					   $("#loading_div").css("display","none");
-					   return;
-				   }
-				   else
-				   {
-					   $("#loading_div").css("display","block");
-				   }
-				   var not_original = response.not_original;
-				   for(var i = 0; i<myMsg.length; i++){
-					   if(oldest_message_id <= myMsg[i].messageId)
-					   {
-						   $("#loading_div").css("display","none");
-						   continue;
-					   }
-					   oldest_message_id = myMsg[i].messageId;
-					   var str = '<dl class="feed_list"><dt class="face"><a href="javascript:void(0);"><img src="';
-					   if(myMsg[i].user.image!=null){
-						   str = str + myMsg[i].user.image;
-					   }else{
-						   str = str + 'homepage-img/upimg.png';
-					   }
-					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="javascript:void(0);" class="author_name">' + myMsg[i].user.nickname + '</a>:&nbsp;' + myMsg[i].text + '</p>';
-					   if(myMsg[i].image!=null){
-						   str = str + '<p><div style="margin-left:10px; margin-top:5px;"><img src="' + myMsg[i].image + '" style="width:300px"></div></p>';
-					   }
-					   if(myMsg[i].sourceId!=-1){
-						   str = str + '<p><div class="previous_div"><p><a href="javascript:void(0);" class="author_name">@' + myMsg[i].original.user.nickname + '</a>:&nbsp;' + myMsg[i].original.text + '</p>';
-						   if(myMsg[i].original.image!=null){
-							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + myMsg[i].original.image + '" width="300"></div></p>';
-						   }
-						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + myMsg[i].original.messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + myMsg[i].original.messageId + '" onClick="comment(this.name)">Comment</a></span>' + myMsg[i].original.timeDescription + '&nbsp;&nbsp;&nbsp;';
-						   if(myMsg[i].original.position!=null && myMsg[i].original.position!=""){
-							   str = str + 'From ' + myMsg[i].original.position;
-						   }
-						   str = str + '</p></div></p>';
-					   }
-					   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + myMsg[i].messageId + '" onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + myMsg[i].messageId + '" onClick="comment(this.name)">Comment</a></span>' + myMsg[i].timeDescription + '&nbsp;&nbsp;&nbsp;';
-					   if(myMsg[i].position!=null && myMsg[i].position!=""){
-						   str = str + 'From ' + myMsg[i].position;
-					   }
-					   str = str + '</p></dd></dl>';
-					   var mainlist = document.getElementById("mainlist");
-					   mainlist.innerHTML = mainlist.innerHTML + str;
-					   str = null;
-					   document.all.conr.style.height=document.all.conl.offsetHeight+"px";
-				   }
-		   });
-   }
-   </script>
    
      </div>
        
@@ -285,7 +109,7 @@ $(function () {
              <li>
                <a href="myFollowings" style="text-decoration: none !important; ">
                <strong>
-               <%=user.getFollowingCount() %>
+               2
                </strong>
                <span>
                FOLLOWING
@@ -295,7 +119,7 @@ $(function () {
              <li>
                 <a href="myFollowers" style="text-decoration: none !important">
                 <strong>
-                <%=user.getFollowerCount() %>
+                5
                 </strong>
                 <span>
                 FOLLOWERS
@@ -305,7 +129,7 @@ $(function () {
              <li>
                 <a href="myPosts" style="text-decoration: none !important">
                 <strong>
-                <%=user.getPostCount() %>
+                12
                 </strong>
                 <span>
                 POSTS
@@ -343,34 +167,6 @@ $(function () {
                   <td><a href="javascript:void(0);" title="wronged"><img src="Face/wronged.gif" width="24" height="24" alt="wronged"></td>
                 </tr>
               </table>
-				<script type="text/javascript">
-				var isClick=false;
-				$("body").click(function(event){
-					if($("#publish_emotion").css("display")=="block"
-					&&(event.clientX<$("#publish_emotion").offset().left||event.clientX>$("#publish_emotion").offset().left+$("#emotion_button").width()
-					||event.clientY<$("#publish_emotion").offset().top||event.clientY>$("#emotion_button").offset().top+$("#emotion_button").height())){
-						if(!isClick){
-							$("#emotion_img").attr("src","homepage-img/emotion_0.png");
-							$("#publish_emotion").fadeOut(700);
-						} else {
-							isClick = false;
-						}
-					}
-				});
-				$("#emotion_button").click(function(event){
-					$("#publish_emotion").css("left",$("#emotion_button").offset().left);
-					$("#publish_emotion").css("top",$("#emotion_button").offset().top+$("#emotion_button").height());
-					$("#emotion_img").attr("src","homepage-img/emotion_1.png");
-					$("#publish_emotion").fadeIn(700);
-					isClick=true;
-				});
-				$("#publish_emotion").find("a").click(function( event){
-				    var insertCon=$(this).attr("title");
-				    $("#publish_text").insertContent("["+insertCon+"]");
-					$("#emotion_img").attr("src","homepage-img/emotion_0.png");
-					$("#publish_emotion").fadeOut(700);
-				});
-				</script>
        </div>
        <div id="publish_image">
        <div style="width:100%; z-index:300; position:absolute">
@@ -381,75 +177,13 @@ $(function () {
        <div style="z-index:250; position:absolute">
 	       <img id="preview_image" />
        </div>
-       	<script type="text/javascript">
-		$("#image_file").change(function(event){
-			$("#publish_image_close").click(function(e) {
-                $("#publish_image").fadeOut(700);
-            });
-			$("#publish_image").css("left",$("#image_button").offset().left);
-			$("#publish_image").css("top",$("#image_button").offset().top+$("#image_button").height());
-			$("#image_img").attr("src","homepage-img/image_1.png");
-			$("#publish_image").fadeIn(700);
-		});
-		$("body").click(function(event){
-					if($("#publish_image").css("display")=="block"
-					&&(event.clientX<$("#publish_image").offset().left||event.clientX>$("#publish_image").offset().left+$("#publish_image").width()
-					||event.clientY<$("#publish_image").offset().top||event.clientY>$("#image_button").offset().top+$("#image_button").height())){
-						$("#publish_image").fadeOut(700);
-					}
-				});
-		</script>
        </div>
        <div id="publish_location">
-       <div style="float:left; margin-left:10px; margin-top:10px; width:200px; height:200px; display:table-cell; vertical-align:middle; text-align: center">
+       <div style="float:left; margin-left:10px; margin-top:10px; width:200px; height:200px; text-align: center; line-height:200px">
        	<img id="google_map" src="homepage-img/loader.gif" />
        </div>
        <div style="float:left; margin-left:10px"><img src="homepage-img/mark.png" /></div>
        <div style="float:left; margin-left:5px"><p style="font-size:16px;" id="positionInfo"></p></div>
-       	<script type="text/javascript">
-		var isClick = false;
-		var isLocation = false;
-		$("#location_button").click(function(){
-			isClick=true;
-			if(isLocation){
-				$("#location_img").attr("src","homepage-img/location_0.png");
-				$("#positionInfo").text("");
-				isLocation = false;
-			} else {
-				$("#publish_location").css("left",$("#location_button").offset().left);
-				$("#publish_location").css("top",$("#location_button").offset().top+$("#location_button").height());
-				$("#location_img").attr("src","homepage-img/location_1.png");
-				$("#publish_location").fadeIn(700);
-				isLocation = true;
-			}
-		});
-		$("body").click(function(event){
-					if($("#publish_location").css("display")=="block"
-					&&(event.clientX<$("#publish_location").offset().left||event.clientX>$("#publish_location").offset().left+$("#publish_location").width()
-					||event.clientY<$("#publish_location").offset().top||event.clientY>$("#location_button").offset().top+$("#location_button").height())){
-						if(!isClick){
-							$("#publish_location").fadeOut(700);
-						} else {
-							isClick = false;
-						}
-					}
-				});
-			document.getElementById("location_button").onclick=function(){
-				if(navigator.geolocation){
-					navigator.geolocation.getCurrentPosition(show_map,handle_error ,null);
-				}
-			}
-			function handle_error(){
-			}
-			function show_map(position) {
-				var coords = position.coords;
-				$("#google_map").attr("src","http://maps.google.com/maps/api/staticmap?center=" + coords.latitude + "," + coords.longitude + "&zoom=12&size=200x200&maptype=roadmap&markers=color:red%7Clabel:A%7C" + coords.latitude + "," + coords.longitude + "&sensor=false");
-				$.get("googlePosition.action?latitude="+coords.latitude+"&longitude="+coords.longitude,null,function(result){
-					var response = JSON.parse(result);
-					document.getElementById("positionInfo").textContent = response.results[0].address_components[1].long_name + ", " + response.results[0].address_components[2].long_name;
-				});
-			}
-		</script>
        </div>
        <div id="back_div">
        
@@ -471,47 +205,7 @@ $(function () {
        <div style="float:right; margin-right:15px"><input value="Forward" type="button" class="forward_button" onClick="forward_send()" /></div>
        </div>
         </form>
-        <script type="text/javascript">
-			function forward_send(){
-				var a=$("#forward_message_id").val();
-				var b=$("#forward_text").val();
-				closing();
-				$.post("forward.action",{"messageid":$("#forward_message_id").val(),"text":$("#forward_text").val(),"upload":"null"},function(result){
-					var str = '<dt class="face"><a href="javascript:void(0);"><img src="';
-					   if(result.lastPost.user.image!=null){
-						   str = str + result.lastPost.user.image;
-					   }else{
-						   str = str + 'homepage-img/upimg.png';
-					   }
-					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="javascript:void(0);" class="author_name">' + result.lastPost.user.nickname + '</a>:&nbsp;' + result.lastPost.text + '</p>';
-					   if(result.lastPost.image!=null){
-						   str = str + '<p><div style="margin-left:10px; margin-top:5px;"><img src="' + result.lastPost.image + '" style="width:300px"></div></p>';
-					   }
-					   if(result.lastPost.sourceId!=-1){
-						   str = str + '<p><div class="previous_div"><p><a href="javascript:void(0);" class="author_name">@' + result.lastPost.original.user.nickname + '</a>:&nbsp;' + result.lastPost.original.text + '</p>';
-						   if(result.lastPost.original.image!=null){
-							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + result.lastPost.original.image + '" width="300"></div></p>';
-						   }
-						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + result.lastPost.original.messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + result.lastPost.original.messageId + '" onClick="comment(this.name)">Comment</a></span>' + result.lastPost.original.timeDescription + '&nbsp;&nbsp;&nbsp;';
-						   if(result.lastPost.original.position!=null && result.lastPost.original.position!=""){
-							   str = str + 'From ' + result.lastPost.original.position;
-						   }
-						   str = str + '</p></div></p>';
-					   }
-					   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="comment(this.name)">Comment</a></span>' + result.lastPost.timeDescription + '&nbsp;&nbsp;&nbsp;';
-					   if(result.lastPost.position!=null && result.lastPost.position!=""){
-						   str = str + 'From ' + result.lastPost.position;
-					   }
-					   str = str + '</p></dd>';
-					   var i = document.createElement("dl");
-					   i.className="feed_list";
-					   i.innerHTML=str;
-					   var mainlist = document.getElementById("mainlist");
-					   mainlist.insertBefore(i,mainlist.firstChild);
-				});
-				$("#forward_text").val("");
-			}
-		</script>
        </div>
+       <script type="text/javascript" src="js/homepage.js"></script>
 </body>
 </html>

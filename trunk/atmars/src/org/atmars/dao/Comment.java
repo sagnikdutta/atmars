@@ -15,7 +15,6 @@ public class Comment implements java.io.Serializable {
 	private Message message;
 	private String text;
 	private Date time;
-	private String timeDescription=null;
 
 	// Constructors
 
@@ -77,14 +76,6 @@ public class Comment implements java.io.Serializable {
 
 	public void setTime(Date time) {
 		this.time = time;
-	}
-
-	public String getTimeDescription() {
-		return timeDescription;
-	}
-
-	public void setTimeDescription(String timeDescription) {
-		this.timeDescription = timeDescription;
 	}
 
 }
