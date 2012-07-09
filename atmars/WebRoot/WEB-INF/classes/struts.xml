@@ -8,7 +8,7 @@
 		<action name="myFollowers" class="org.atmars.action.UserDetailAction"
 			method="myFollowers">
 			<result name="success">
-				followers.jsp
+				wodefensi.jsp
 			</result>
 		</action>
 		<action name="search" class="org.atmars.action.UserDetailAction"
@@ -19,14 +19,14 @@
 		</action>
 
 		<action name="myFollowings" class="org.atmars.action.UserDetailAction"
-			method="myFollowings">
+			method="wodeguanzhu">
 			<result name="success">
-				following.jsp
+				wodeguanzhu.jsp
 			</result>
 		</action>
 
 
-		<!-- publish forward get message -->
+<!-- publish forward   get message-->
 		<action name="publish" class="org.atmars.action.SendMessageAction">
 			<result name="success" type="json">
 				<param name="excludeNullProperties">true</param>
@@ -40,7 +40,7 @@
 		</action>
 
 
-
+		
 
 		<action name="getMyMessages" class="org.atmars.action.GetMessageAction"
 			method="execute_getMyMessages">
@@ -106,7 +106,8 @@
 		<!-- get start, login or check update or register -->
 
 		<action name="start" class="org.atmars.action.UserAction">
-			<result name="success">login.jsp</result>
+			<result name="notlogged">login.jsp</result>
+			<result name="logged">update.jsp</result>
 		</action>
 
 		<action name="performRegister" class="org.atmars.action.UserAction"
@@ -124,7 +125,8 @@
 		<!-- get google position -->
 
 		<action name="googlePosition" class="org.atmars.action.GooglePosition">
-			<result name="success" type="json">
+			<result name="success">
+				getPosition.jsp
 			</result>
 		</action>
 
@@ -145,10 +147,6 @@
 				</param>
 			</result>
 		</action>
-		<action name="addFollow" class="org.atmars.action.UserAction"
-			method="AddFollow">
-			<result name="success" type="json">
-			</result>
-		</action>
+
 	</package>
 </struts>

@@ -6,11 +6,9 @@
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <%
-	java.util.List<User> list_following=(java.util.List<User>) session.getAttribute("followings");
+	java.util.List<User> list_following=(java.util.List<User>) session.getAttribute("following");
 %>
-<%
-    org.atmars.dao.User user=(org.atmars.dao.User) session.getAttribute("user");
-%>
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -243,6 +241,7 @@ li {
 }
 
 .item .person_name {
+	float: left;
 	font-size: 20px;
 	line-height: 22px;
 	overflow: hidden;
@@ -251,6 +250,7 @@ li {
 }
 
 .item .item_content {
+	float: left;
 	font-size: 12px;
 	margin-top: 10px;
 	color: ##79c5e9;
@@ -311,21 +311,21 @@ li {
 					<img src="homepage-img/homelogo.png" height="34" width="100" />
 				</div>
 				<ul class="list">
-					<li><a href="homepage.jsp"
+					<li><a href="C:\Users\quanshuo\Desktop\dream\homepage.html"
 						class="gbgt current" style="color:#fff; padding-left:5px">
 							Homepage </a></li>
-					<li><a href="search"
+					<li><a href="C:\Users\quanshuo\Desktop\dream\homepage.html"
 						class="gbgt" style="color:#fff; padding-left:15px"> Search </a>
 					</li>
 				</ul>
 				<ul class="right">
-					<li><a href="homepage.jsp"
+					<li><a href="C:\Users\quanshuo\Desktop\dream\homepage.html"
 						class="gbgt"
 						style="color:#fff; padding-left:6px; padding-right:6px">
-							<%=user.getNickname() %> </a>
+							Quanshuo </a>
 					</li>
 					<li style=" width:90px;"><a
-						href="" class="gbgt"
+						href="C:\Users\quanshuo\Desktop\dream\homepage.html" class="gbgt"
 						style="color:#fff; padding-left:14px"> Logout </a>
 					</li class="current">
 				</ul>
@@ -339,9 +339,9 @@ li {
 						<img src="template-img/follow.png" class="left_nav_icon">
 						<p class="left_nav_content">Following</p>
 					</div>
-					<a href="myFollowers" class="left_nav_item"> <img
+					<a href="#" class="left_nav_item"> <img
 						src="template-img/follower.png" class="left_nav_icon">
-						<p class="left_nav_content">Followers</p> </a> <a href="search"
+						<p class="left_nav_content">Followers</p> </a> <a href="#"
 						class="left_nav_item"> <img src="template-img/search.png"
 						class="left_nav_icon">
 						<p class="left_nav_content">Search</p> </a>
@@ -349,7 +349,66 @@ li {
 			</div>
 			<div id="conr" class="conr">
 				<div id="person_list">
-					
+					<div class="item">
+						<div class="item_l">
+							<dl>
+								<dt>
+									<img src="homepage-img/upimg.png" class="item_img" />
+								</dt>
+								<dd>
+									<div class="person_name">Quanshuo</div>
+									<div class="item_content">
+										<ul>
+											<li><strong>Following(10)</strong></li>
+											<li><strong>Followers(10)</strong></li>
+											<li style="border:none"><strong>Posts(10)</strong></li>
+										</ul>
+									</div>
+								</dd>
+							</dl>
+						</div>
+					</div>
+
+					<div class="item">
+						<div class="item_l">
+							<dl>
+								<dt>
+									<img src="homepage-img/upimg.png" class="item_img" />
+								</dt>
+								<dd>
+									<div class="person_name">Quanshuo</div>
+									<div class="item_content">
+										<ul>
+											<li><strong>Following(10)</strong></li>
+											<li><strong>Followers(10)</strong></li>
+											<li style="border:none"><strong>Posts(10)</strong></li>
+										</ul>
+									</div>
+								</dd>
+							</dl>
+						</div>
+					</div>
+
+					<div class="item">
+						<div class="item_l">
+							<dl>
+								<dt>
+									<img src="homepage-img/upimg.png" class="item_img" />
+								</dt>
+								<dd>
+									<div class="person_name">Quanshuo</div>
+									<div class="item_content">
+										<ul>
+											<li><strong>Following(10)</strong></li>
+											<li><strong>Followers(10)</strong></li>
+											<li style="border:none"><strong>Posts(10)</strong></li>
+										</ul>
+									</div>
+								</dd>
+							</dl>
+						</div>
+					</div>
+
 					<%
 						int i = 0;
 						while (i < list_following.size()) {
@@ -365,8 +424,8 @@ li {
 									<div class="person_name"><%=((User) list_following.get(i)).getNickname()%></div>
 									<div class="item_content">
 										<ul>
-											<li><strong>Following(<%=((User) list_following.get(i)).getFollowingCount()%>)</strong></li>
-											<li><strong>Followers(<%=((User) list_following.get(i)).getFollowerCount()%>)</strong></li>
+											<li><strong>Following(<%=((User) list_following.get(i)).getFollowedCount()%>)</strong></li>
+											<li><strong>Followers(<%=((User) list_following.get(i)).getFollowingsCount()%>)</strong></li>
 											<li style="border:none"><strong>Posts(<%=((User) list_following.get(i)).getPostCount()%>)</strong></li>
 										</ul>
 									</div>

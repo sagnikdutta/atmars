@@ -7,7 +7,7 @@ import org.atmars.dao.Comment;
 public class GetCommentAction extends BaseAction {
 
 	private int messageId;
-	private int cursor=9999999;
+	private int cursor=-1;
 	
 	private List<Comment> comments;
 	

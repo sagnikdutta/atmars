@@ -39,14 +39,17 @@ public class UserAction extends BaseAction {
 	private String nickname;
 	private boolean gender;
 
-	private int hisId;
+	private int user_id;
+	private int his_id;
 	
 	public String execute() {
 		super.InitAction();
 		ActionContext ctx = ActionContext.getContext();
 		Map session = ctx.getSession();
-		session.put("userList", u_service.GetNewRegisterUsers());
-		return "success";
+		if (session.get("user") == null) {
+			return "notlogged";
+		}
+		return "logged";
 	}
 
 	public String performRegister() throws IOException {
@@ -129,12 +132,11 @@ public class UserAction extends BaseAction {
 		return "login_fail";
 	}
 
-	public String AddFollow() {
+	public String Add_follow() {
 		
 		super.InitAction();
 		
-		u_service.addFollowing(current_usr_from_session.getUserId(), this.hisId);
-		
+		u_service.addFollowing(this.user_id, this.his_id);
 		return "add_follow_success";
 		
 	}
@@ -175,15 +177,20 @@ public class UserAction extends BaseAction {
 		this.imageURI = imageURI;
 	}
 
-
-	
-
-	public int getHisId() {
-		return hisId;
+	public int getUser_id() {
+		return user_id;
 	}
 
-	public void setHisId(int hisId) {
-		this.hisId = hisId;
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
+
+	public int getHis_id() {
+		return his_id;
+	}
+
+	public void setHis_id(int his_id) {
+		this.his_id = his_id;
 	}
 
 	public void setEmail(String email) {

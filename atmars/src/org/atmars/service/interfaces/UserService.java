@@ -14,7 +14,9 @@ public interface UserService {
 	public boolean isAdministrator(String username);
 	public void addFollowing(Integer myid, Integer hisid);
 	public User getUserInfo(Integer id);
-	
+	public Integer getFollowingNumber(Integer id);
+	public Integer getFollowedNumber(Integer id);
+	public Integer getPostsNumber(Integer id);
 	public Integer getId(String username);
 	public void removeFollowing(Integer id);
 	public void updateUserInfo(User instance);
@@ -22,6 +24,4 @@ public interface UserService {
 	public List getUserInfoByEmail(String email);
 	public UserDAO getUserDAO();
 	public FollowDAO getFollowDAO();
-	
-	public List<User> GetNewRegisterUsers();
 }
