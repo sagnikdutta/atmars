@@ -2,13 +2,18 @@ package org.atmars.service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
+
+
 
 import org.atmars.dao.Follow;
 import org.atmars.dao.FollowDAO;
 import org.atmars.dao.User;
 import org.atmars.dao.UserDAO;
 import org.atmars.service.interfaces.UserService;
+import org.hibernate.Query;
+import org.hibernate.classic.Session;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 
 public class UserServiceImpl implements UserService {
@@ -123,24 +128,8 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
-	@Override
-	public Integer getFollowingNumber(Integer id) {
-		User user = userDAO.findById(id);
-		return user.getFollowsForFollowedId().size();
-	}
-
-	@Override
-	public Integer getFollowedNumber(Integer id) {
-		User user = userDAO.findById(id);
-		return user.getFollowsForFollowingId().size();
-	}
-
-	@Override
-	public Integer getPostsNumber(Integer id) {
-		User user = userDAO.findById(id);
-		return user.getMessages().size();
-	}
-
+	
+	
 	@Override
 	public Integer getId(String email) {
 		System.out.println(email);
@@ -160,5 +149,19 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void removeFollowing(Integer id) {
 		followDAO.delete(followDAO.findById(id));
+	}
+
+	@Override
+	public List<User> GetNewRegisterUsers() {
+		List<User> l = new ArrayList<User>();
+		Session s = userDAO.getHibernateTemplate().getSessionFactory().openSession();
+		String queryString = "from User u order by u.time desc";
+		Query q =  s.createQuery(queryString);
+		q.setMaxResults(9);
+		for(Object obj:q.list())
+		{
+			l.add((User) obj);
+		}
+		return l;
 	}
 }

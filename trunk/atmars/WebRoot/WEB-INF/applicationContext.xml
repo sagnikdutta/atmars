@@ -77,8 +77,6 @@
 	</bean>
 	
 	
-	
-	
 	<bean id="userService" class="org.atmars.service.UserServiceImpl">
 		<constructor-arg>
 			<ref bean="UserDAO" />
@@ -87,8 +85,6 @@
 			<ref bean="FollowDAO" />
 		</constructor-arg>
 	</bean>
-
-
 
 	<bean id="messageService" class="org.atmars.service.MessageServiceImpl">
 		<constructor-arg>

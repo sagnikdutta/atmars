@@ -11,31 +11,10 @@ import java.util.Set;
 public class Message implements java.io.Serializable {
 
 	// Fields
-
-
 	private Message original=null;
+	private boolean newestState=true;
+	private String timeDescription;
 	
-	
-	public Message getOriginal() {
-		return original;
-	}
-
-	public void setOriginal(Message original) {
-		this.original = original;
-	}
-
-	private boolean NewestState=true;
-	
-	
-
-	public boolean getNewestState() {
-		return NewestState;
-	}
-
-	public void setNewestState(boolean newestState) {
-		NewestState = newestState;
-	}
-
 	private Integer messageId;
 	private User user;
 	private String text;
@@ -44,35 +23,26 @@ public class Message implements java.io.Serializable {
 	private String position;
 	private Integer sourceId;
 	private Integer commentCount;
+	private Integer forwardCount;
 	private Set favorites = new HashSet(0);
 	private Set comments = new HashSet(0);
 
-	private String timeDescription;
 	// Constructors
-
-	public String getTimeDescription() {
-		return timeDescription;
-	}
-
-	public void setTimeDescription(String timeDescription) {
-		this.timeDescription = timeDescription;
-	}
 
 	/** default constructor */
 	public Message() {
 	}
 
 	/** minimal constructor */
-	public Message(String text, Integer sourceId, Integer commentCount) {
+	public Message(String text, Integer sourceId) {
 		this.text = text;
 		this.sourceId = sourceId;
-		this.commentCount = commentCount;
 	}
 
 	/** full constructor */
 	public Message(User user, String text, String image, Date time,
 			String position, Integer sourceId, Integer commentCount,
-			Set favorites, Set comments) {
+			Integer forwardCount, Set favorites, Set comments) {
 		this.user = user;
 		this.text = text;
 		this.image = image;
@@ -80,6 +50,7 @@ public class Message implements java.io.Serializable {
 		this.position = position;
 		this.sourceId = sourceId;
 		this.commentCount = commentCount;
+		this.forwardCount = forwardCount;
 		this.favorites = favorites;
 		this.comments = comments;
 	}
@@ -150,6 +121,14 @@ public class Message implements java.io.Serializable {
 		this.commentCount = commentCount;
 	}
 
+	public Integer getForwardCount() {
+		return this.forwardCount;
+	}
+
+	public void setForwardCount(Integer forwardCount) {
+		this.forwardCount = forwardCount;
+	}
+
 	public Set getFavorites() {
 		return this.favorites;
 	}
@@ -164,6 +143,30 @@ public class Message implements java.io.Serializable {
 
 	public void setComments(Set comments) {
 		this.comments = comments;
+	}
+
+	public Message getOriginal() {
+		return original;
+	}
+
+	public void setOriginal(Message original) {
+		this.original = original;
+	}
+
+	public boolean getNewestState() {
+		return newestState;
+	}
+
+	public void setNewestState(boolean newestState) {
+		this.newestState = newestState;
+	}
+
+	public String getTimeDescription() {
+		return timeDescription;
+	}
+
+	public void setTimeDescription(String timeDescription) {
+		this.timeDescription = timeDescription;
 	}
 
 }

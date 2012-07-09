@@ -135,6 +135,7 @@ $(function () {
 				} else {
 					$("#image_img").attr("src","homepage-img/image_0.png");
 					upload_filename = "null";
+					upload_img = "null";
 					$("#image_file").attr("value","");
 					$("#preview_image").width(null);
 					$("#preview_image").height(null);
@@ -149,7 +150,7 @@ $(function () {
      </form>
       <script type="text/javascript">
 	  function publish(){
-		  $.post("fasong.action",{"messageid":"-1","text":$("#publish_text").val(),"position":$("#positionInfo").text(),"upload":upload_img,"uploadFileName":upload_filename},function(result){
+		  $.post("publish.action",{"messageid":"-1","text":$("#publish_text").val(),"position":$("#positionInfo").text(),"upload":upload_img,"uploadFileName":upload_filename},function(result){
 			  var str = '<dt class="face"><a href="javascript:void(0);"><img src="';
 			  if(result.lastPost.user.image!=null){
 					str = str + result.lastPost.user.image;
@@ -171,6 +172,15 @@ $(function () {
 					   var mainlist = document.getElementById("mainlist");
 					   mainlist.insertBefore(i,mainlist.firstChild);
 					   $("#publish_text").val("");
+					   $("#image_img").attr("src","homepage-img/image_0.png");
+					   upload_filename = "null";
+					   upload_img = "null";
+					   $("#image_file").attr("value","");
+					   $("#preview_image").width(null);
+					   $("#preview_image").height(null);
+					   $("#location_img").attr("src","homepage-img/location_0.png");
+					   $("#positionInfo").text("");
+					   isLocation = false;
 		  });
 	  }
 	  </script>
@@ -205,9 +215,24 @@ $(function () {
    var oldest_message_id = 9999999;
    function pageRefresh(){
 	   $.get("getMyMessages.action?oldest_message_id=" + oldest_message_id,null,function(response){
+		   $("#loading_div").css("display","block");
 				   var myMsg = response.myMessages;
+				   if(myMsg == null || myMsg.length == 0)
+				   {
+					   $("#loading_div").css("display","none");
+					   return;
+				   }
+				   else
+				   {
+					   $("#loading_div").css("display","block");
+				   }
 				   var not_original = response.not_original;
 				   for(var i = 0; i<myMsg.length; i++){
+					   if(oldest_message_id <= myMsg[i].messageId)
+					   {
+						   $("#loading_div").css("display","none");
+						   continue;
+					   }
 					   oldest_message_id = myMsg[i].messageId;
 					   var str = '<dl class="feed_list"><dt class="face"><a href="javascript:void(0);"><img src="';
 					   if(myMsg[i].user.image!=null){
@@ -220,14 +245,13 @@ $(function () {
 						   str = str + '<p><div style="margin-left:10px; margin-top:5px;"><img src="' + myMsg[i].image + '" style="width:300px"></div></p>';
 					   }
 					   if(myMsg[i].sourceId!=-1){
-						   var j=myMsg[i].sourceId;
-						   str = str + '<p><div class="previous_div"><p><a href="javascript:void(0);" class="author_name">@' + not_original[j].user.nickname + '</a>:&nbsp;' + not_original[j].text + '</p>';
-						   if(not_original[j].image!=null){
-							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + not_original[j].image + '" width="300"></div></p>';
+						   str = str + '<p><div class="previous_div"><p><a href="javascript:void(0);" class="author_name">@' + myMsg[i].original.user.nickname + '</a>:&nbsp;' + myMsg[i].original.text + '</p>';
+						   if(myMsg[i].original.image!=null){
+							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + myMsg[i].original.image + '" width="300"></div></p>';
 						   }
-						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + not_original[j].messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + not_original[j].messageId + '" onClick="comment(this.name)">Comment</a></span>' + not_original[j].timeDescription + '&nbsp;&nbsp;&nbsp;';
-						   if(not_original[j].position!=null){
-							   str = str + 'From ' + not_original[j].position;
+						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + myMsg[i].original.messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + myMsg[i].original.messageId + '" onClick="comment(this.name)">Comment</a></span>' + myMsg[i].original.timeDescription + '&nbsp;&nbsp;&nbsp;';
+						   if(myMsg[i].original.position!=null && myMsg[i].original.position!=""){
+							   str = str + 'From ' + myMsg[i].original.position;
 						   }
 						   str = str + '</p></div></p>';
 					   }
@@ -261,7 +285,7 @@ $(function () {
              <li>
                <a href="myFollowings" style="text-decoration: none !important; ">
                <strong>
-               2
+               <%=user.getFollowingCount() %>
                </strong>
                <span>
                FOLLOWING
@@ -271,7 +295,7 @@ $(function () {
              <li>
                 <a href="myFollowers" style="text-decoration: none !important">
                 <strong>
-                5
+                <%=user.getFollowerCount() %>
                 </strong>
                 <span>
                 FOLLOWERS
@@ -281,7 +305,7 @@ $(function () {
              <li>
                 <a href="myPosts" style="text-decoration: none !important">
                 <strong>
-                12
+                <%=user.getPostCount() %>
                 </strong>
                 <span>
                 POSTS
@@ -389,6 +413,7 @@ $(function () {
 			isClick=true;
 			if(isLocation){
 				$("#location_img").attr("src","homepage-img/location_0.png");
+				$("#positionInfo").text("");
 				isLocation = false;
 			} else {
 				$("#publish_location").css("left",$("#location_button").offset().left);
@@ -450,8 +475,39 @@ $(function () {
 			function forward_send(){
 				var a=$("#forward_message_id").val();
 				var b=$("#forward_text").val();
-				$.post("zhuanfa.action",{"messageid":$("#forward_message_id").val(),"text":$("#forward_text").val()},function(result){
-					closing();
+				closing();
+				$.post("forward.action",{"messageid":$("#forward_message_id").val(),"text":$("#forward_text").val(),"upload":"null"},function(result){
+					var str = '<dt class="face"><a href="javascript:void(0);"><img src="';
+					   if(result.lastPost.user.image!=null){
+						   str = str + result.lastPost.user.image;
+					   }else{
+						   str = str + 'homepage-img/upimg.png';
+					   }
+					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="javascript:void(0);" class="author_name">' + result.lastPost.user.nickname + '</a>:&nbsp;' + result.lastPost.text + '</p>';
+					   if(result.lastPost.image!=null){
+						   str = str + '<p><div style="margin-left:10px; margin-top:5px;"><img src="' + result.lastPost.image + '" style="width:300px"></div></p>';
+					   }
+					   if(result.lastPost.sourceId!=-1){
+						   str = str + '<p><div class="previous_div"><p><a href="javascript:void(0);" class="author_name">@' + result.lastPost.original.user.nickname + '</a>:&nbsp;' + result.lastPost.original.text + '</p>';
+						   if(result.lastPost.original.image!=null){
+							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + result.lastPost.original.image + '" width="300"></div></p>';
+						   }
+						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + result.lastPost.original.messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + result.lastPost.original.messageId + '" onClick="comment(this.name)">Comment</a></span>' + result.lastPost.original.timeDescription + '&nbsp;&nbsp;&nbsp;';
+						   if(result.lastPost.original.position!=null && result.lastPost.original.position!=""){
+							   str = str + 'From ' + result.lastPost.original.position;
+						   }
+						   str = str + '</p></div></p>';
+					   }
+					   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="comment(this.name)">Comment</a></span>' + result.lastPost.timeDescription + '&nbsp;&nbsp;&nbsp;';
+					   if(result.lastPost.position!=null && result.lastPost.position!=""){
+						   str = str + 'From ' + result.lastPost.position;
+					   }
+					   str = str + '</p></dd>';
+					   var i = document.createElement("dl");
+					   i.className="feed_list";
+					   i.innerHTML=str;
+					   var mainlist = document.getElementById("mainlist");
+					   mainlist.insertBefore(i,mainlist.firstChild);
 				});
 				$("#forward_text").val("");
 			}
