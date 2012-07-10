@@ -36,10 +36,6 @@ public class SendMessageAction extends BaseAction{
 	@Override
 	public String execute() {
 		InitAction();
-		if(this.text==null)
-		{
-			return "error";
-		}
 		try {
 			ImageUpload();
 		} catch (IOException e) {
@@ -110,11 +106,9 @@ public class SendMessageAction extends BaseAction{
 		String fn = dir + filename;
 		BASE64Decoder decoder = new BASE64Decoder();
 		String upload2 = new String();
-		int index1 = this.upload.indexOf('/');
+		int index1 = this.upload.indexOf(',');
 		upload2 = this.upload.substring(index1 + 1);
-		index1 = upload2.indexOf('/');
-		String upload3 = upload2.substring(index1);
-		byte[] b = decoder.decodeBuffer(upload3);
+		byte[] b = decoder.decodeBuffer(upload2);
 
 		FileOutputStream fos = new FileOutputStream(fn, true);
 		fos.write(b);

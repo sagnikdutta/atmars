@@ -49,5 +49,9 @@ public class Follow implements java.io.Serializable {
 	public void setUserByFollowedId(User userByFollowedId) {
 		this.userByFollowedId = userByFollowedId;
 	}
-
+	public void MakeAllSetNull()
+	{
+		this.userByFollowedId.MakeAllSetNull();
+		this.userByFollowingId.MakeAllSetNull();
+	}
 }

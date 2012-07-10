@@ -8,7 +8,7 @@
 		<action name="myFollowers" class="org.atmars.action.UserDetailAction"
 			method="myFollowers">
 			<result name="success">
-				wodefensi.jsp
+				followers.jsp
 			</result>
 		</action>
 		<action name="search" class="org.atmars.action.UserDetailAction"
@@ -19,14 +19,14 @@
 		</action>
 
 		<action name="myFollowings" class="org.atmars.action.UserDetailAction"
-			method="wodeguanzhu">
+			method="myFollowings">
 			<result name="success">
-				wodeguanzhu.jsp
+				following.jsp
 			</result>
 		</action>
 
 
-<!-- publish forward   get message-->
+		<!-- publish or forward message -->
 		<action name="publish" class="org.atmars.action.SendMessageAction">
 			<result name="success" type="json">
 				<param name="excludeNullProperties">true</param>
@@ -39,8 +39,8 @@
 			</result>
 		</action>
 
+<!-- Message action -->
 
-		
 
 		<action name="getMyMessages" class="org.atmars.action.GetMessageAction"
 			method="execute_getMyMessages">
@@ -51,6 +51,13 @@
 					currentNewestMessageId,
 					newestMessage_Now
 				</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+			<result name="error">get_my_Message_error.jsp</result>
+		</action>
+		
+		<action name="getOriginalMessages" class="org.atmars.action.GetOriginalMessages">
+			<result name="success" type="json">
 				<param name="excludeNullProperties">true</param>
 			</result>
 			<result name="error">get_my_Message_error.jsp</result>
@@ -103,11 +110,10 @@
 
 
 
-		<!-- get start, login or check update or register -->
+		<!-- get register or login -->
 
 		<action name="start" class="org.atmars.action.UserAction">
-			<result name="notlogged">login.jsp</result>
-			<result name="logged">update.jsp</result>
+			<result name="success">login.jsp</result>
 		</action>
 
 		<action name="performRegister" class="org.atmars.action.UserAction"
@@ -125,8 +131,7 @@
 		<!-- get google position -->
 
 		<action name="googlePosition" class="org.atmars.action.GooglePosition">
-			<result name="success">
-				getPosition.jsp
+			<result name="success" type="json">
 			</result>
 		</action>
 
@@ -147,6 +152,9 @@
 				</param>
 			</result>
 		</action>
-
+		<action name="addFollow" class="org.atmars.action.AddFollow">
+			<result name="success" type="json">
+			</result>
+		</action>
 	</package>
 </struts>

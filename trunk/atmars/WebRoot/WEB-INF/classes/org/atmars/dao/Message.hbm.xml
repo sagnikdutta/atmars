@@ -20,7 +20,7 @@
             <column name="image" length="100" />
         </property>
         <property name="time" type="timestamp">
-            <column name="time" length="19" />
+            <column name="time" length="0" />
         </property>
         <property name="position" type="string">
             <column name="position" length="100" />
@@ -29,7 +29,10 @@
             <column name="source_id" not-null="true" />
         </property>
         <property name="commentCount" type="integer">
-            <column name="comment_count" not-null="false" />
+            <column name="commentCount" />
+        </property>
+        <property name="forwardCount" type="integer">
+            <column name="forwardCount" />
         </property>
         <set name="favorites" inverse="true">
             <key>

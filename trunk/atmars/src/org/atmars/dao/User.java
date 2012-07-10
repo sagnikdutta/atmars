@@ -199,5 +199,12 @@ public class User implements java.io.Serializable {
 	public void setFollowsForFollowedId(Set followsForFollowedId) {
 		this.followsForFollowedId = followsForFollowedId;
 	}
-
+	public void MakeAllSetNull()
+	{
+		this.comments=null;
+		this.favorites=null;
+		this.followsForFollowedId=null;
+		this.followsForFollowingId=null;
+		this.messages=null;
+	}
 }

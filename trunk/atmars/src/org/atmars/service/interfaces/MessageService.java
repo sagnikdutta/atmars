@@ -7,19 +7,19 @@ import org.atmars.dao.Comment;
 import org.atmars.dao.Message;
 import org.atmars.dao.MessageDAO;
 import org.atmars.dao.Topic;
-import org.atmars.dao.UserDAO;
 
 public interface MessageService {
 	
-	public Message sendMessage(Integer userid, String text, String image, String position, int source);
-	public Message getSingleMessage(Integer id);
-	public Comment sendComment(Integer userid, Integer messageid, String text);
-	public List<Message> searchMessage(Integer userid, String query);
-	public void addFavoriteMessage(Integer userid, Integer messageid);
-	public List<Topic> getHotTopic();
-	public List getMessage(int userid, int oldest_message_id);
-	public List getMessage(int intValue);
-	public List findNewestMessageS();
 	public MessageDAO getMessageDAO();
+	
+	public Message sendMessage(Integer userid, String text, String image, String position, int source);
+	public Message getSingleMessage(Integer messageId);
+	public List<Message> getUpdates(int userid, int oldest_message_id);
+	public List<Message> GetOriginalMessages(int userId,int cursor);
+	
+	public Comment sendComment(Integer userid, Integer messageid, String text);
 	List<Comment> getComment(int messageId, int cursor);
+	
+	public List<Message> findNewestMessagesFromAllUsers();
+	
 }
