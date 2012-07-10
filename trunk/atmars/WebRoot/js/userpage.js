@@ -15,8 +15,11 @@ $(function () {
 
 function Sync(){
 	document.all.conr.style.height=document.all.conl.offsetHeight+"px";
-	pageRefresh();
+	var userpage=document.getElementById("mypage");
+	var url=document.URL;
+	userpage.innerHTML='<a href="'+url+'" >'+url+'</a>';
 }
+
 
  var upload_img = "null";
 		   var upload_filename = "null";
@@ -92,10 +95,7 @@ function publish(){
 					   $("#preview_image").height(null);
 					   $("#location_img").attr("src","homepage-img/location_0.png");
 					   $("#positionInfo").text("");
-					   $("#letter_num").text("140");
 					   isLocation = false;
-					   $("#posts_amount").text($("#posts_amount").text()-0+1);
-					   document.all.conr.style.height=document.all.conl.offsetHeight+"px";
 		  });
 	  }
 
@@ -109,7 +109,6 @@ function publish(){
 	   $("#forward_div").css("top",document.body.scrollTop+(window.screen.availHeight-290)/2);
 	   $("#forward_message_id").val(id);
 	   $("#forward_text").val("Fw: ");
-	   $("#forward_letter_num").text("140");
    }
    
    function closing(){
@@ -118,12 +117,12 @@ function publish(){
    }
    $(window).scroll(function(e) {
 	   if(document.body.scrollTop+window.screen.availHeight>=document.body.scrollHeight){
-		   pageRefresh();
+		   pageRefresh();	   
 	   }
    });
    var oldest_message_id = 9999999;
    function pageRefresh(){
-	   $.get("getMyMessages.action?oldest_message_id=" + oldest_message_id,null,function(response){
+	   $.get("getOriginalMessages?cursor=" + oldest_message_id + "&userId=" + $(".container").id,null,function(response){
 		   $("#loading_div").css("display","block");
 				   var myMsg = response.myMessages;
 				   if(myMsg == null || myMsg.length == 0)
@@ -261,10 +260,9 @@ var isClick = false;
 			}
 			function show_map(position) {
 				var coords = position.coords;
+				$("#google_map").attr("src","http://maps.google.com/maps/api/staticmap?center=" + coords.latitude + "," + coords.longitude + "&zoom=12&size=200x200&maptype=roadmap&markers=color:red%7Clabel:A%7C" + coords.latitude + "," + coords.longitude + "&sensor=false");
 				$.get("googlePosition.action?latitude="+coords.latitude+"&longitude="+coords.longitude,null,function(result){
-					$("#google_map").attr("src","http://maps.google.com/maps/api/staticmap?center=" + coords.latitude + "," + coords.longitude + "&zoom=12&size=200x200&maptype=roadmap&markers=color:red%7Clabel:A%7C" + coords.latitude + "," + coords.longitude + "&sensor=false");
-					var response = JSON.parse(result.position);
-					$("#position_mark_logo").css("display","none");
+					var response = JSON.parse(result);
 					document.getElementById("positionInfo").textContent = response.results[0].address_components[1].long_name + ", " + response.results[0].address_components[2].long_name;
 				});
 			}
@@ -310,8 +308,6 @@ function forward_send(){
 					   var mainlist = document.getElementById("mainlist");
 					   mainlist.insertBefore(i,mainlist.firstChild);
 					   $("#" + "message_" + result.lastPost.messageId).fadeIn(1000);
-					   $("#posts_amount").text($("#posts_amount").text()-0+1);
-					   document.all.conr.style.height=document.all.conl.offsetHeight+"px";
 				});
 				$("#forward_text").val("");
 			}
@@ -329,7 +325,6 @@ function comment(id,isnew){
 	if(isCommentActive) {
 		$("#" + activeComment).slideUp(1000);
 		$("#" + activeComment).html("")
-		document.all.conr.style.height=document.all.conl.offsetHeight+"px";
 		isCommentActive = false;
 		if(elementname == activeComment) {
 			return;
@@ -348,7 +343,6 @@ function comment(id,isnew){
 		$("#" + elementname).slideDown(1000);
 		isCommentActive = true;
 		activeComment = elementname;
-		document.all.conr.style.height=document.all.conl.offsetHeight+"px";
 		$("#comment_submit").keyup(function(e) {
   		  $("#comment_submit").height($("#comment_submit").scrollTop()+$("#comment_submit").height());
 		});
@@ -370,6 +364,5 @@ function handleCommentSubmit() {
 		i.innerHTML = '<dt class="commentdt"><img src="' + newComment.user.image + '" style="width:30px; height:30px"/></dt><dd class="commentdd"><p style="margin:0"><a href="javascript:void(0)" class="author_name_comment">@' + newComment.user.nickname + '</a>:&nbsp;' + newComment.text + '</p><p style="margin:0; text-align:right">' + newComment.timeDescription + '</p></dd>';
 		clist.insertBefore(i,clist.childNodes[1]);
 		$("#" + "commentlist_" + newComment.commentId).fadeIn(1000);
-		document.all.conr.style.height=document.all.conl.offsetHeight+"px";
 	});
 }
