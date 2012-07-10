@@ -66,5 +66,9 @@ public class Favorite implements java.io.Serializable {
 	public void setTime(Date time) {
 		this.time = time;
 	}
-
+	public void MakeAllSetNull()
+	{
+		this.user.MakeAllSetNull();
+		this.message.MakeAllSetNull();
+	}
 }

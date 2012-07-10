@@ -29,6 +29,7 @@ public class MessageDAO extends HibernateDaoSupport {
 	public static final String POSITION = "position";
 	public static final String SOURCE_ID = "sourceId";
 	public static final String COMMENT_COUNT = "commentCount";
+	public static final String FORWARD_COUNT = "forwardCount";
 
 	protected void initDao() {
 		// do nothing
@@ -112,6 +113,10 @@ public class MessageDAO extends HibernateDaoSupport {
 
 	public List findByCommentCount(Object commentCount) {
 		return findByProperty(COMMENT_COUNT, commentCount);
+	}
+
+	public List findByForwardCount(Object forwardCount) {
+		return findByProperty(FORWARD_COUNT, forwardCount);
 	}
 
 	public List findAll() {

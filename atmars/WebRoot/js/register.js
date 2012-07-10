@@ -1,19 +1,13 @@
 
 
 	function handleFiles(files){
-		for (var i = 0; i < files.length; i++) {  
-		var file = files[i];  
-		var imageType = /image.*/;  
-		if (!file.type.match(imageType)) {  
-		continue;  
-		}  
+		var file = files[0];  
 		var reader = new FileReader();  
 		reader.onload = function(e){
 		var img=document.getElementById("image");
-		img.src=e.target.result;
+			img.src=e.target.result;
 		}
-		reader.readAsDataURL(file);  
-		}
+		reader.readAsDataURL(file);
 	}
     
 	function email_text_onfocus(){
