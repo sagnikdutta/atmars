@@ -17,7 +17,7 @@
 <head>
 <meta charset="utf-8">
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>Untitled Document</title>
+<title>Welcome to Atmars</title>
 <!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="head" -->
 <!-- TemplateEndEditable -->
@@ -481,7 +481,7 @@ dd{
          {
           %>
          
-          <li ><a href="javascript:void(0)"><img src="<%=((User) userList.get(i)).getImage()%>" class="person_img" ></a><a href="javascript:void(0)" class="person_name"><%=((User) userList.get(i)).getNickname()%></a> </li>
+          <li ><a href="javascript:void(0)"><img src="<%=((User) userList.get(i)).getImage()%>" class="person_img" ></a><a href="userpage?hisId=<%=((User) userList.get(i)).getUserId() %>" class="person_name"><%=((User) userList.get(i)).getNickname()%></a> </li>
           <% 
           i++;
           }

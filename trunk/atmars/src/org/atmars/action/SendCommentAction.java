@@ -1,6 +1,7 @@
 package org.atmars.action;
 
 import org.atmars.dao.Comment;
+import org.atmars.service.TimeServiceImpl;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -17,7 +18,7 @@ public class SendCommentAction extends BaseAction {
 		InitAction();
 		
 		_publishedComment =  m_service.sendComment(current_usr_from_session.getUserId(), messageId, commentString);
-		System.out.println(_publishedComment.getUser().getUserId());
+		_publishedComment.setTimeDescription(TimeServiceImpl.getTimeDelay(_publishedComment.getTime()));
 		
 		return "success";
 	}

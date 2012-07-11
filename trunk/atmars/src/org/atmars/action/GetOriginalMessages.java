@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.atmars.dao.Message;
 import org.atmars.service.FaceServiceImpl;
+import org.atmars.service.TimeServiceImpl;
 
 public class GetOriginalMessages extends BaseAction {
 	
@@ -20,6 +21,8 @@ public String execute()
 	}
 	originalList = m_service.GetOriginalMessages(userId, cursor);
 	for (Message m : originalList) {
+		m.setTimeDescription(TimeServiceImpl.getTimeDelay(m.getTime()));
+		m.setText(FaceServiceImpl.replaceFace(m.getText()));
 		if (m.getSourceId() != -1) {
 			Message m2 = m_service.getSingleMessage(m.getSourceId());
 			if (m2 != null) {

@@ -22,4 +22,6 @@ public interface MessageService {
 	
 	public List<Message> findNewestMessagesFromAllUsers();
 	
+	
+	public List<Message> GetMyMessages(int userId,int cursor);
 }

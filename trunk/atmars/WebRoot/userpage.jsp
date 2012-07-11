@@ -2,17 +2,18 @@
 <%@page import="org.atmars.dao.User"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <%
     org.atmars.dao.User user=(org.atmars.dao.User) session.getAttribute("user");
+    org.atmars.dao.User hisUser = (org.atmars.dao.User)request.getAttribute("hisUser");
 %>
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Atmars Homepage</title>
+<title>Atmars Userpage</title>
 
 <link rel="stylesheet" type="text/css" href="css/userpage.css">
 <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
@@ -30,7 +31,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <img src="homepage-img/homelogo.png" height="34" width="100" />
       </div>
        <ul class="list">
-           <li><a href="homepage.jsp" class="gbgt current" style="color:#fff; padding-left:5px" > Homepage </a></li>
+           <li><a href="homepage" class="gbgt current" style="color:#fff; padding-left:5px" > Homepage </a></li>
            <li>
               <a href="search" class="gbgt" style="color:#fff; padding-left:15px" >
               Search
@@ -39,12 +40,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        </ul>
        <ul class="right">
           <li>
-              <a href="C:\Users\quanshuo\Desktop\dream\homepage.html" class="gbgt" style="color:#fff; padding-left:6px; padding-right:6px" > 
-              <%=user.getNickname() %>
-            </a>
+             
+							<%if (user!=null) {%>
+							
+							 <a href="homepage" class="gbgt" style="color:#fff; padding-left:6px; padding-right:6px" >
+							 <%=user.getNickname() %> </a>
+							
+							<%}else{ %>
+							 <a href="start" class="gbgt" style="color:#fff; padding-left:6px; padding-right:6px" >
+							 login </a>
+							<%} %>
+							
+							
           </li>
           <li  style=" width:90px;">
-              <a href="C:\Users\quanshuo\Desktop\dream\homepage.html" class="gbgt" style="color:#fff; padding-left:14px" > 
+              <a href="logout" class="gbgt" style="color:#fff; padding-left:14px" > 
               Logout
               </a>
           </li class="current">
@@ -55,15 +65,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      <div id="conl" class="conl">
        <div class="user_infor">
          <div class="user_image">
-           <img src="image/default.png" width="132px" height="132px" />
+           <img src="<s:property value="hisUser.image" />" width="132px" height="132px" />
          </div>
          <div class="user_detail">
-           <div class="user_name">Quanshuo</div>
+           <div class="user_name"><s:property value="nickname" /></div>
            <div id="sex">
              <div >
-               <img class="sex_img" src="userpage-img/false.png"/>
+               <img class="sex_img" src="userpage-img/<s:property value="hisUser.gender" />.png"/>
              </div>
-             <div class="sex_name">Male</div>
+             <s:set name="gender" value="gender" />
+             <%if(hisUser.getGender()){ %>
+            <div class="sex_name">Male</div>
+             <%}else{ %>
+              <div class="sex_name">Female</div>
+             <%} %>
+            
              <div style="clear:both"></div>
            </div>
            <div id="mypage" class="mypage"></div>
@@ -83,17 +99,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        <div class="person_info">
           <dl>
              <dt>
-                <img src="<%=user.getImage() %>" height="50" width="50"/>
+                <img src="<s:property value="hisUser.image" />" height="50" width="50"/>
              </dt>
-             <dd ><a href="javascript:void(0);" class="name" ><%=user.getNickname() %></a></dd>
+             <dd ><a href="userpage?hisId=<%=hisUser.getUserId() %>" class="name" ><s:property value="hisUser.nickname" /></a></dd>
           </dl>
        </div>
        <div class="attention">
           <ul>
              <li>
-               <a href="myFollowings" style="text-decoration: none !important; ">
+               <a href="javascript:void(0);" style="text-decoration: none !important; ">
                <strong>
-               <%=user.getFollowingCount() %>
+               <s:property value="hisUser.followingCount" />
                </strong>
                <span>
                FOLLOWING
@@ -101,9 +117,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                </a>
              </li>
              <li>
-                <a href="myFollowers" style="text-decoration: none !important">
+                <a href="javascript:void(0);" style="text-decoration: none !important">
                 <strong>
-                <%=user.getFollowerCount() %>
+               <s:property value="hisUser.followerCount" />
                 </strong>
                 <span>
                 FOLLOWERS
@@ -111,9 +127,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </a>
              </li>
              <li>
-                <a href="myPosts" style="text-decoration: none !important">
+                <a href="userpage?hisId=<%=hisUser.getUserId() %>" style="text-decoration: none !important">
                 <strong>
-                <%=user.getPostCount() %>
+                <s:property value="hisUser.postCount" />
                 </strong>
                 <span>
                 POSTS
@@ -127,48 +143,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
   </div>
 </div>
-<div id="publish_emotion">
-              <table width="200" border="0" align="center">
-                <tr>
-                  <td width="40" height="40"><a href="javascript:void(0);" title="smile"><img src="Face/smile.gif" width="24" height="24" alt="smile"></a></td>
-                  <td width="40"><a href="javascript:void(0);" title="naughty"><img src="Face/naughty.gif" width="24" height="24" alt="naughty"></td>
-                  <td width="40"><a href="javascript:void(0);" title="cry"><img src="Face/cry.gif" width="24" height="24" alt="cry"></td>
-                  <td width="40"><a href="javascript:void(0);" title="angry"><img src="Face/angry.gif" width="24" height="24" alt="angry"></td>
-                  <td width="40"><a href="javascript:void(0);" title="embarrass"><img src="Face/embarrass.gif" width="24" height="24" alt="embarrass"></td>
-                </tr>
-                <tr>
-                  <td height="40"><a href="javascript:void(0);" title="crazy"><img src="Face/crazy.gif" width="24" height="24" alt="crazy"></td>
-                  <td><a href="javascript:void(0);" title="effort"><img src="Face/effort.gif" width="24" height="24" alt="effort"></td>
-                  <td><a href="javascript:void(0);" title="despise"><img src="Face/despise.gif" width="24" height="24" alt="despise"></td>
-                  <td><a href="javascript:void(0);" title="lovely"><img src="Face/lovely.gif" width="24" height="24" alt="lovely"></td>
-                  <td><a href="javascript:void(0);" title="laugh"><img src="Face/laugh.gif" width="24" height="24" alt="laugh"></td>
-                </tr>
-                <tr>
-                  <td height="40"><a href="javascript:void(0);" title="titter"><img src="Face/titter.gif" width="24" height="24" alt="titter"></td>
-                  <td><a href="javascript:void(0);" title="surprise"><img src="Face/surprise.gif" width="24" height="24" alt="surprise"></td>
-                  <td><a href="javascript:void(0);" title="orz"><img src="Face/orz.gif" width="24" height="24" alt="orz"></td>
-                  <td><a href="javascript:void(0);" title="unhappy"><img src="Face/unhappy.gif" width="24" height="24" alt="unhappy"></td>
-                  <td><a href="javascript:void(0);" title="wronged"><img src="Face/wronged.gif" width="24" height="24" alt="wronged"></td>
-                </tr>
-              </table>
-       </div>
-       <div id="publish_image">
-       <div style="width:100%; z-index:300; position:absolute">
-	       <div id="publish_image_close">
-           	<a href="javascript:void(0);"><img src="homepage-img/close.png" /></a>
-           </div>
-       </div>
-       <div style="z-index:250; position:absolute">
-	       <img id="preview_image" />
-       </div>
-       </div>
-       <div id="publish_location">
-       <div style="float:left; margin-left:10px; margin-top:10px; width:200px; height:200px; text-align: center; line-height:200px">
-       	<img id="google_map" src="homepage-img/loader.gif" />
-       </div>
-       <div style="float:left; margin-left:10px"><img src="homepage-img/mark.png" /></div>
-       <div style="float:left; margin-left:5px"><p style="font-size:16px;" id="positionInfo"></p></div>
-       </div>
        <div id="back_div">
        
        </div>

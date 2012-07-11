@@ -38,7 +38,7 @@ public class MessageServiceImpl implements MessageService {
 				message.setSourceId(zhuanfaID);
 			} else {
 				String text2 = text 
-						+  "//" + "<a href=\"\""+ ">@"+m.getUser().getNickname()+"</a>"
+						+  "//" + "<a href=\"userpage?hisId="+m.getUser().getUserId()+"\""+ ">@"+m.getUser().getNickname()+"</a>"
 						+ m.getText();
 				message.setText(text2);
 				message.setSourceId(m.getSourceId());
@@ -259,4 +259,32 @@ public class MessageServiceImpl implements MessageService {
 		this.topicDAO = topicDAO;
 	}
 
+	@Override
+	public List<Message> GetMyMessages(int userId,int cursor) {
+		String queryString ="select distinct m from Message as m left join m.user as u left join u.followsForFollowedId as f"
+				+" where (f.userByFollowingId.userId="+userId
+				+" or u.userId="+userId+")";
+		if(cursor!=-1)
+		{
+			queryString+=" and (m.messageId<"+cursor+")";
+		}
+		queryString +="order by m.messageId desc";
+		Query q = messageDAO.getHibernateTemplate().getSessionFactory().openSession().createQuery(queryString);
+		q.setMaxResults(10);
+		List l = q.list();
+		List <Message> messageList= new ArrayList<Message>();
+		for(Object obj:l)
+		{
+			Message m = (Message) obj;
+			if(m.getSourceId()!=-1)
+			{
+				m.setOriginal(getSingleMessage(m.getSourceId()));
+				m.getOriginal().MakeAllSetNull();
+			}
+			m.MakeAllSetNull();
+			messageList.add(m);
+		}
+		return messageList;
+	}
+	
 }
