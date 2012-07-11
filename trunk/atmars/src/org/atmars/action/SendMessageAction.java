@@ -53,14 +53,17 @@ public class SendMessageAction extends BaseAction {
 		}
 		lastPost.MakeAllSetNull();
 		lastPost.getUser().setPassword(null);
+		lastPost.setTimeDescription(TimeUtils.getTimeDelay(lastPost.getTime()));
+		lastPost.setText(ConvertPostUtils.replaceFace(lastPost.getText()));
+		lastPost.setText(ConvertPostUtils.replaceAtMarkToHTML(lastPost.getText()));
 		if(lastPost.getOriginal()!=null)
 		{
 			lastPost.getOriginal().MakeAllSetNull();
 			lastPost.getUser().setPassword(null);
+			lastPost.getOriginal().setText(ConvertPostUtils.replaceFace(lastPost.getOriginal().getText()));
+			lastPost.getOriginal().setText(ConvertPostUtils.replaceAtMarkToHTML(lastPost.getOriginal().getText()));
+			lastPost.getOriginal().setTimeDescription(TimeUtils.getTimeDelay(lastPost.getOriginal().getTime()));
 		}
-		lastPost.setTimeDescription(TimeUtils.getTimeDelay(lastPost.getTime()));
-		lastPost.setText(ConvertPostUtils.replaceFace(lastPost.getText()));
-		lastPost.setText(ConvertPostUtils.replaceAtMarkToHTML(lastPost.getText()));
 		User u = uService.getUserInfoByUserId(currentUserFromSession.getUserId());
 		ActionContext.getContext().getSession().put("user", u);
 		return "success";

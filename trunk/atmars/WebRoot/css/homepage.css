@@ -19,7 +19,7 @@ h1, h2, h3, h4, h5, h6, p {
 	padding-left: 15px; /* adding the padding to the sides of the elements within the divs, instead of the divs themselves, gets rid of any box model math. A nested div with side padding can also be used as an alternate method. */
 }
 a img { /* this selector removes the default blue border displayed in some browsers around an image when it is surrounded by a link */
-	border: none;
+	border: none;	
 }
 
 /* ~~ Styling for your site's links must remain in this order - including the group of selectors that create the hover effect. ~~ */

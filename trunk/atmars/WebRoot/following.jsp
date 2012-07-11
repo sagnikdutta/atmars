@@ -50,17 +50,17 @@ a img {
 
 /* ~~ Styling for your site's links must remain in this order - including the group of selectors that create the hover effect. ~~ */
 a:link {
-	text-decoration: underline;
+	text-decoration: none;
 	/* unless you style your links to look extremely unique, it's best to provide underlines for quick visual identification */
 }
 
 a:visited {
-	text-decoration: underline;
+	text-decoration: none;
 }
 
 a:hover,a:active,a:focus {
 	/* this group of selectors will give a keyboard navigator the same hover experience as the person using a mouse. */
-	text-decoration: none;
+	text-decoration: underline;
 }
 
 /* ~~ this container surrounds all other divs giving them their percentage-based width ~~ */
@@ -273,6 +273,13 @@ li {
 	overflow: hidden;
 	margin-top: -3px;
 	color: #79c5e9;
+}
+
+.item .person_name a {
+	color:#0066FF;
+}
+.item .person_name a:visited {
+	color:#0066FF;
 }
 
 .item .item_content {

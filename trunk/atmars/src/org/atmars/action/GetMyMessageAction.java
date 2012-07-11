@@ -24,6 +24,14 @@ public class GetMyMessageAction extends BaseAction {
 			m.setTimeDescription(TimeUtils.getTimeDelay(m.getTime()));
 			m.setText(ConvertPostUtils.replaceFace(m.getText()));
 			m.setText(ConvertPostUtils.replaceAtMarkToHTML(m.getText()));
+			if(m.getOriginal()!=null)
+			{
+				m.getOriginal().MakeAllSetNull();
+				m.getOriginal().getUser().setPassword(null);
+				m.getOriginal().setText(ConvertPostUtils.replaceFace(m.getOriginal().getText()));
+				m.getOriginal().setText(ConvertPostUtils.replaceAtMarkToHTML(m.getOriginal().getText()));
+				m.getOriginal().setTimeDescription(TimeUtils.getTimeDelay(m.getOriginal().getTime()));
+			}
 		}
 		return "success";
 	}

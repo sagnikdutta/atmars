@@ -159,11 +159,11 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
 	margin:20px 0px 0px 32px;
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:18px;
-	background:#80c50c;
+	background:#FFF;
 	background-position:center;
-	color:#fff;
+	color:#333;
 	border:0;
-	border-radius: 3px;
+	border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,.35);
 }
 
@@ -468,7 +468,7 @@ dd{
   <div class="content">
      <div class="tList_mdu1">
        <dl class="mainlist">
-          <dt>People who are using mars</dt>
+          <dt style="font-family:'Comic Sans MS', cursive; font-size:18px">&nbsp;&nbsp;New User ...</dt>
        </dl>
        <dd>
          <ul id="userlist">
@@ -495,7 +495,7 @@ dd{
     
     <div class="tList_mdu2">
         <dl class="twit_list">
-           <dt>what are they talking about</dt>
+           <dt style="font-family:'Comic Sans MS', cursive; font-size:18px">&nbsp;&nbsp;Talking ...</dt>
            <dd style="position:relative; height:550px; overflow:hidden">
            <div class="bottomcover" style="z-index:2"></div>
            <div id="listr" class="maincontent" style="position:relative">
