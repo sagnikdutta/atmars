@@ -1,28 +1,25 @@
 package org.atmars.service.interfaces;
 
-import java.security.NoSuchAlgorithmException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.atmars.dao.FollowDAO;
 import org.atmars.dao.User;
-import org.atmars.dao.UserDAO;
 
 public interface UserService {
-	
 	public void register(String email, String password, String nickname, boolean gender);
-	public boolean checkLogin(String username, String password);
+	public boolean checkLogin(String email, String password);
+	public String CalculateTicket(User user) throws UnsupportedEncodingException;
+	public boolean AuthenticUserWithTicket(int userId,String ticket);
 	public boolean isAdministrator(String username);
 	public boolean addFollowing(Integer myid, Integer hisid);
 	public boolean alreadyFollowing(int me,int him);
-	public User getUserInfo(Integer id);
-	
-	public Integer getId(String username);
-	public void removeFollowing(Integer id);
 	public void updateUserInfo(User instance);
-	public String getHashedPassword(String password);
-	public List getUserInfoByEmail(String email);
-	public UserDAO getUserDAO();
-	public FollowDAO getFollowDAO();
-	
+	public User getUserInfoByUserId(Integer userId);
+	public User getUserInfoByEmail(String email);
+	public User getUserInfoByNickname(String nickname);
+	public void deleteUser(User user);
 	public List<User> GetNewRegisterUsers();
+	public List<User> SearchUser(String searchString,Integer currentUserId);
+	public List<User> GetFollowings(int userId);
+	public List<User> GetFollowers(int userId);
 }

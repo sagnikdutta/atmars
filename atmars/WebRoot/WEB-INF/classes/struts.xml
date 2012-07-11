@@ -12,7 +12,7 @@
 		</interceptors>
 		<default-interceptor-ref name="completeStackWithLoginAuth" />
 		<global-results>
-			<result name="login" type="redirectAction">start</result>
+			<result name="login" type="redirectAction">showLoginPage</result>
 		</global-results>
 	</package>
 	<package name="default" extends="mars-default" namespace="/">
@@ -108,7 +108,7 @@
 		</action>
 	</package>
 	<package name="default2" extends="json-default" namespace="/">
-		<action name="start" class="org.atmars.action.UserAction">
+		<action name="showLoginPage" class="org.atmars.action.UserAction" method="execute_showLoginPage">
 			<result name="success">login.jsp</result>
 		</action>
 		<action name="performRegister" class="org.atmars.action.UserAction"
@@ -122,7 +122,7 @@
 			<result name="login_fail">login.jsp</result>
 		</action>
 		<action name="logout" class="org.atmars.action.LogoutAction">
-			<result name="success" type="redirectAction">start</result>
+			<result name="success" type="redirectAction">showLoginPage</result>
 		</action>
 		<action name="init_weiboQiang" class="org.atmars.action.GetMessageAction"
 			method="weiboQiang">
@@ -176,6 +176,22 @@
 		</action>
 		<action name="userpage" class="org.atmars.action.ShowJspPagesAction" method="ShowUserPage">
 			<result name="success">userpage.jsp</result>
+		</action>
+		<action name="mobileSendMessage" class="org.atmars.action.MobileSendMessageAction">
+			<result name="success" type="json">
+				<param name="excludeProperties">
+					userId,
+					forwardId,
+					ticket,
+					text
+				</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+		<action name="mobileLogin" class="org.atmars.action.MobileLoginAction">
+			<result name="success" type="json">
+			<param name="excludeNullProperties">true</param>
+			</result>
 		</action>
 	</package>
 </struts>

@@ -3,21 +3,26 @@ package org.atmars.action;
 import java.util.List;
 
 import org.atmars.dao.Comment;
+import org.atmars.utils.*;
 
 public class GetCommentAction extends BaseAction {
+	private static final long serialVersionUID = 1L;
 
 	private int messageId;
-	private int cursor=9999999;
-	
+	private int cursor = -1;
+
 	private List<Comment> comments;
-	
+
 	@Override
-	public String execute()
-	{
+	public String execute() {
 		InitAction();
-		
-		comments = m_service.getComment(messageId, cursor);
-		
+
+		comments = mService.getComment(messageId, cursor);
+		for (Comment c : comments) {
+			c.MakeAllSetNull();
+			c.setTimeDescription(TimeUtils.getTimeDelay(c.getTime()));
+		}
+
 		return "success";
 	}
 
@@ -44,5 +49,5 @@ public class GetCommentAction extends BaseAction {
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
-	
+
 }

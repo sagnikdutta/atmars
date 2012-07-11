@@ -8,10 +8,10 @@ import java.util.Map;
 import org.apache.struts2.ServletActionContext;
 import org.atmars.dao.Message;
 import org.atmars.dao.User;
-import org.atmars.service.FaceServiceImpl;
-import org.atmars.service.TimeServiceImpl;
 import org.atmars.service.interfaces.MessageService;
 import org.atmars.service.interfaces.UserService;
+import org.atmars.utils.ConvertPostUtils;
+import org.atmars.utils.TimeUtils;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -21,18 +21,18 @@ import sun.misc.BASE64Decoder;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class SendMessageAction extends BaseAction{
-	
+public class SendMessageAction extends BaseAction {
+	private static final long serialVersionUID = 1L;
 	private String text;
-	private int messageid=-1;
+	private int messageid = -1;
 	private String position;
 	private String upload;
 	private String uploadFileName;
 	private String imageURI;
-	
-	//return lastPost;
-	private Message lastPost=null;
-	
+
+	// return lastPost;
+	private Message lastPost = null;
+
 	@Override
 	public String execute() {
 		InitAction();
@@ -43,56 +43,38 @@ public class SendMessageAction extends BaseAction{
 			e.printStackTrace();
 		}
 		if (imageURI != null) {
-			lastPost = m_service.sendMessage(
-					current_usr_from_session.getUserId(), text, imageURI,
+			lastPost = mService.sendMessage(
+					currentUserFromSession.getUserId(), text, imageURI,
 					position, messageid);
 		} else {
-			lastPost = m_service.sendMessage(
-					current_usr_from_session.getUserId(), text, null, position,
+			lastPost = mService.sendMessage(
+					currentUserFromSession.getUserId(), text, null, position,
 					messageid);
 		}
-
-		lastPost.setUser(current_usr_from_session);
-		lastPost.getUser().setComments(null);
-		lastPost.getUser().setFavorites(null);
-		lastPost.getUser().setFollowsForFollowedId(null);
-		lastPost.getUser().setFollowsForFollowingId(null);
-		lastPost.getUser().setMessages(null);
-		lastPost.setComments(null);
-		lastPost.setFavorites(null);
-		
-		String timedes = TimeServiceImpl.getTimeDelay(lastPost.getTime());
-		lastPost.setTimeDescription(timedes);
-		String text2 = FaceServiceImpl.replaceFace(lastPost.getText());
-		lastPost.setText(text2);
-		
-		if(lastPost.getSourceId()!=-1)
+		lastPost.MakeAllSetNull();
+		lastPost.getUser().setPassword(null);
+		if(lastPost.getOriginal()!=null)
 		{
-			Message original = m_service.getSingleMessage(lastPost.getSourceId());
-			
-			original.setTimeDescription(TimeServiceImpl.getTimeDelay(original.getTime()));
-			original.setText(FaceServiceImpl.replaceFace(original.getText()));
-			
-			original.setComments(null);
-			original.setFavorites(null);
-			lastPost.setOriginal(original);
+			lastPost.getOriginal().MakeAllSetNull();
+			lastPost.getUser().setPassword(null);
 		}
-		ActionContext ctx = ActionContext.getContext();
-		Map<String, Object> session = ctx.getSession();
-		User u = u_service.getUserInfo(current_usr_from_session.getUserId());
-		session.put("user", u);
+		lastPost.setTimeDescription(TimeUtils.getTimeDelay(lastPost.getTime()));
+		lastPost.setText(ConvertPostUtils.replaceFace(lastPost.getText()));
+		lastPost.setText(ConvertPostUtils.replaceAtMarkToHTML(lastPost.getText()));
+		User u = uService.getUserInfoByUserId(currentUserFromSession.getUserId());
+		ActionContext.getContext().getSession().put("user", u);
 		return "success";
 	}
-	
+
 	private boolean ImageUpload() throws IOException {
-		
-		this.imageURI=null;
-		
+
+		this.imageURI = null;
+
 		if (upload.equals("null")) {
 			return false;
 		}
 		String user_dir = "image\\"
-				+ String.valueOf(current_usr_from_session.getUserId()) + "\\";
+				+ String.valueOf(currentUserFromSession.getUserId()) + "\\";
 		String dir = webRootPath + user_dir;
 		if (new File(dir).exists()) {
 
@@ -117,17 +99,18 @@ public class SendMessageAction extends BaseAction{
 		fos.write(b);
 		fos.flush();
 		imageURI = "image/"
-				+ String.valueOf(current_usr_from_session.getUserId()) + "/"
+				+ String.valueOf(currentUserFromSession.getUserId()) + "/"
 				+ filename;
 		return true;
 	}
+
 	public String getText() {
 		return text;
 	}
+
 	public void setText(String text) {
 		this.text = text;
 	}
-	
 
 	public int getMessageid() {
 		return messageid;
@@ -140,24 +123,31 @@ public class SendMessageAction extends BaseAction{
 	public String getPosition() {
 		return position;
 	}
+
 	public void setPosition(String position) {
 		this.position = position;
 	}
+
 	public String getUpload() {
 		return upload;
 	}
+
 	public void setUpload(String upload) {
 		this.upload = upload;
 	}
+
 	public String getUploadFileName() {
 		return uploadFileName;
 	}
+
 	public void setUploadFileName(String uploadFileName) {
 		this.uploadFileName = uploadFileName;
 	}
+
 	public Message getLastPost() {
 		return lastPost;
 	}
+
 	public void setLastPost(Message lastPost) {
 		this.lastPost = lastPost;
 	}

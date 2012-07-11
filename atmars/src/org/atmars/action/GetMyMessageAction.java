@@ -4,20 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.atmars.dao.Message;
+import org.atmars.utils.ConvertPostUtils;
+import org.atmars.utils.TimeUtils;
 
 public class GetMyMessageAction extends BaseAction {
 	private static final long serialVersionUID = 1L;
 	private int oldest_message_id;
 	private List<Message> myMessages;
-	
+
 	@Override
-	public String execute()
-	{	
+	public String execute() {
 		InitAction();
-		
-		myMessages=m_service.GetMyMessages(current_usr_from_session.getUserId(), oldest_message_id);
+
+		myMessages = mService.GetMyMessages(
+				currentUserFromSession.getUserId(), oldest_message_id);
+		for (Message m : myMessages) {
+			m.MakeAllSetNull();
+			m.getUser().setPassword(null);
+			m.setTimeDescription(TimeUtils.getTimeDelay(m.getTime()));
+			m.setText(ConvertPostUtils.replaceFace(m.getText()));
+			m.setText(ConvertPostUtils.replaceAtMarkToHTML(m.getText()));
+		}
 		return "success";
-		
 	}
 
 	public int getOldest_message_id() {
@@ -36,6 +44,4 @@ public class GetMyMessageAction extends BaseAction {
 		this.myMessages = myMessages;
 	}
 
-	
-	
 }

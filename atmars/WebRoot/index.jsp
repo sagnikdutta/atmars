@@ -10,7 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
 
 <%
-	response.sendRedirect("start");
+	response.sendRedirect("showLoginPage");
  %>
 
 </html>

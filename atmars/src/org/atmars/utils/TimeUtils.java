@@ -1,10 +1,10 @@
-package org.atmars.service;
+package org.atmars.utils;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class TimeServiceImpl {
+public class TimeUtils {
 	// 返回现在时间
 	public static String getStringDate() {
 		Date currentTime = new Date();

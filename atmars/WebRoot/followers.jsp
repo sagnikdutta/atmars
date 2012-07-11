@@ -398,18 +398,18 @@ function Sync() {
 						<div class="item_l">
 							<dl>
 								<dt>
-									<img src=<%=((User) list_followers.get(i)).getImage()%>
+									<img src=<%=list_followers.get(i).getImage()%>
 										class="item_img" />
 								</dt>
 								<dd>
-									<div class="person_name"><a href="userpage?hisId=<%=((User) list_followers.get(i)).getUserId()%>"><%=((User) list_followers.get(i)).getNickname()%></a></div>
+									<div class="person_name"><a href="userpage?hisId=<%= list_followers.get(i).getUserId()%>"><%=list_followers.get(i).getNickname()%></a></div>
 									<div class="item_content">
 										<ul>
-											<li><strong>Following(<%=((User) list_followers.get(i)).getFollowingCount() %>)</strong>
+											<li><strong>Following(<%= list_followers.get(i).getFollowingCount() %>)</strong>
 											</li>
-											<li><strong>Followers(<%=((User) list_followers.get(i)).getFollowerCount()%>)</strong>
+											<li><strong>Followers(<%=list_followers.get(i).getFollowerCount()%>)</strong>
 											</li>
-											<li style="border:none"><strong>Posts(<%=((User) list_followers.get(i)).getPostCount() %>)</strong>
+											<li style="border:none"><strong>Posts(<%=list_followers.get(i).getPostCount() %>)</strong>
 											</li>
 										</ul>
 									</div>

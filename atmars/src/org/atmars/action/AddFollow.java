@@ -7,6 +7,8 @@ import org.atmars.dao.User;
 import com.opensymphony.xwork2.ActionContext;
 
 public class AddFollow extends BaseAction {
+
+	private static final long serialVersionUID = 1L;
 	private int hisId;
 	private boolean isSuccess;
 	private String description;
@@ -14,7 +16,7 @@ public class AddFollow extends BaseAction {
 	@Override
 	public String execute() {
 		InitAction();
-		if (u_service.addFollowing(current_usr_from_session.getUserId(), hisId)) {
+		if (uService.addFollowing(currentUserFromSession.getUserId(), hisId)) {
 			isSuccess = true;
 			description = "success";
 			return "success";
@@ -24,7 +26,7 @@ public class AddFollow extends BaseAction {
 		}
 		ActionContext ctx = ActionContext.getContext();
 		Map<String, Object> session = ctx.getSession();
-		User u = u_service.getUserInfo(current_usr_from_session.getUserId());
+		User u = uService.getUserInfoByUserId(currentUserFromSession.getUserId());
 		session.put("user", u);
 		return "success";
 	}
@@ -52,5 +54,5 @@ public class AddFollow extends BaseAction {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 }

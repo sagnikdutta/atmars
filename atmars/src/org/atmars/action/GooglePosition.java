@@ -17,7 +17,7 @@ public class GooglePosition extends ActionSupport {
 	private String latitude;
 	private String longitude;
 	private String position;
-	
+
 	@Override
 	public String execute() {
 		String url = "http://maps.googleapis.com/maps/api/geocode/json?latlng="

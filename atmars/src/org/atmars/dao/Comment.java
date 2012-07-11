@@ -2,8 +2,8 @@ package org.atmars.dao;
 
 import java.util.Date;
 
-import org.atmars.service.FaceServiceImpl;
-import org.atmars.service.TimeServiceImpl;
+import org.atmars.utils.ConvertPostUtils;
+import org.atmars.utils.TimeUtils;
 
 /**
  * Comment entity. @author MyEclipse Persistence Tools
@@ -93,7 +93,5 @@ public class Comment implements java.io.Serializable {
 	{
 		this.message.MakeAllSetNull();
 		this.user.MakeAllSetNull();
-		this.timeDescription=TimeServiceImpl.getTimeDelay(this.time);
-		this.text = FaceServiceImpl.replaceFace(this.text);
 	}
 }

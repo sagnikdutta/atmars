@@ -11,36 +11,39 @@ public class ShowJspPagesAction extends BaseAction {
 	private static final long serialVersionUID = 1L;
 	private int hisId;
 	private User hisUser;
-	
-	public String ShowHomePage()
-	{
+
+	public String ShowHomePage() {
 		InitAction();
-		
+
 		ActionContext ctx = ActionContext.getContext();
 		Map<String, Object> session = ctx.getSession();
 		session.put("user",
-				u_service.getUserInfo(current_usr_from_session.getUserId()));
+				uService.getUserInfoByUserId(currentUserFromSession.getUserId()));
 		return "success";
 	}
-	public String ShowUserPage()
-	{
+
+	public String ShowUserPage() {
 		InitAction();
-		
-		hisUser = u_service.getUserInfo(hisId);
+
+		hisUser = uService.getUserInfoByUserId(hisId);
 
 		return "success";
 	}
+
 	public int getHisId() {
 		return hisId;
 	}
+
 	public void setHisId(int hisId) {
 		this.hisId = hisId;
 	}
+
 	public User getHisUser() {
 		return hisUser;
 	}
+
 	public void setHisUser(User hisUser) {
 		this.hisUser = hisUser;
 	}
-	
+
 }

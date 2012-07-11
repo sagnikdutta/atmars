@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.atmars.service.FaceServiceImpl;
-import org.atmars.service.TimeServiceImpl;
+import org.atmars.utils.ConvertPostUtils;
+import org.atmars.utils.TimeUtils;
 
 /**
  * Message entity. @author MyEclipse Persistence Tools
@@ -178,8 +178,5 @@ public class Message implements java.io.Serializable {
 		if(this.original!=null)
 			this.original.MakeAllSetNull();
 		this.user.MakeAllSetNull();
-		this.timeDescription=TimeServiceImpl.getTimeDelay(this.time);
-		this.text = FaceServiceImpl.replaceFace(this.text);
-		
 	}
 }
