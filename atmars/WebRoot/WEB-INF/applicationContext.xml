@@ -15,7 +15,7 @@
 			value="jdbc:mysql://localhost:3306/marsdb?charset=utf-8">
 		</property>
 		<property name="username" value="root"></property>
-		<!-- <property name="password" value="123"></property> -->
+		<property name="password" value="1234"></property>
 		
 	</bean>
 	<bean id="sessionFactory"
@@ -102,5 +102,29 @@
 		<constructor-arg>
 			<ref bean="TopicDAO" />
 		</constructor-arg>
+	</bean>
+	
+	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616" />
+	</bean>
+	
+	<bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="org.atmars.mailQueue" />
+	</bean>
+	
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+	
+	<bean id="jmail" class="org.atmars.service.Jmail">
+		<property name="jmsTemplate" ref="jmsTemplate"></property>
+		<property name="destination" ref="destination"></property>
+	</bean>
+	
+	<bean id="mailServiceMdp" class="org.atmars.service.MailServiceMdp"></bean>
+	<bean class="org.springframework.jms.listener.SimpleMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="destination"></property>
+		<property name="messageListener" ref="mailServiceMdp"></property>
 	</bean>
 	</beans>

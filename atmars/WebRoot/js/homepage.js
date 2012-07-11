@@ -79,10 +79,14 @@ function publish(){
 					   i.className="feed_list";
 					   i.innerHTML=str;
 					   i.id="message_" + result.lastPost.messageId;
-					   i.style.display = "none";
 					   var mainlist = document.getElementById("mainlist");
 					   mainlist.insertBefore(i,mainlist.firstChild);
-					   $("#" + "message_" + result.lastPost.messageId).fadeIn(1000);
+					   var height=i.offsetHeight+100;
+					   i.style.display = "none";
+					   $("#mainlist").animate({marginTop:height+"px"},600,"swing",function(){
+						   mainlist.style.marginTop="70px";
+						   $("#" + "message_" + result.lastPost.messageId).fadeIn(1000);
+					   });
 					   $("#publish_text").val("");
 					   $("#image_img").attr("src","homepage-img/image_0.png");
 					   upload_filename = "null";
@@ -158,11 +162,11 @@ function publish(){
 						   if(myMsg[i].original.image!=null){
 							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + myMsg[i].original.image + '" width="300"></div></p>';
 						   }
-						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + myMsg[i].original.messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + myMsg[i].original.messageId + '" onClick="comment(this.name,false)">Comment</a></span>' + myMsg[i].original.timeDescription + '&nbsp;&nbsp;&nbsp;';
+						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + myMsg[i].original.messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + myMsg[i].messageId + '" onClick="comment(this.name,false,' + myMsg[i].original.messageId + ')">Comment</a></span>' + myMsg[i].original.timeDescription + '&nbsp;&nbsp;&nbsp;';
 						   if(myMsg[i].original.position!=null && myMsg[i].original.position!=""){
 							   str = str + 'From ' + myMsg[i].original.position;
 						   }
-						   str = str + '</p><div id="commentlist_pre_' + myMsg[i].original.messageId + '" class="commentlist"></div></div></p>';
+						   str = str + '</p><div id="commentlist_pre_' + myMsg[i].messageId + '" class="commentlist"></div></div></p>';
 					   }
 					   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + myMsg[i].messageId + '" onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + myMsg[i].messageId + '" onClick="comment(this.name,true)">Comment</a></span>' + myMsg[i].timeDescription + '&nbsp;&nbsp;&nbsp;';
 					   if(myMsg[i].position!=null && myMsg[i].position!=""){
@@ -291,11 +295,11 @@ function forward_send(){
 						   if(result.lastPost.original.image!=null){
 							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + result.lastPost.original.image + '" width="300"></div></p>';
 						   }
-						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + result.lastPost.original.messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + result.lastPost.original.messageId + '" onClick="comment(this.name,false)">Comment</a></span>' + result.lastPost.original.timeDescription + '&nbsp;&nbsp;&nbsp;';
+						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + result.lastPost.original.messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="comment(this.name,false,' + result.lastPost.original.messageId + ')">Comment</a></span>' + result.lastPost.original.timeDescription + '&nbsp;&nbsp;&nbsp;';
 						   if(result.lastPost.original.position!=null && result.lastPost.original.position!=""){
 							   str = str + 'From ' + result.lastPost.original.position;
 						   }
-						   str = str + '</p><div id="commentlist_pre_' + result.lastPost.original.messageId + '" class="commentlist"></div></div></p>';
+						   str = str + '</p><div id="commentlist_pre_' + result.lastPost.messageId + '" class="commentlist"></div></div></p>';
 					   }
 					   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="comment(this.name,true)">Comment</a></span>' + result.lastPost.timeDescription + '&nbsp;&nbsp;&nbsp;';
 					   if(result.lastPost.position!=null && result.lastPost.position!=""){
@@ -306,10 +310,14 @@ function forward_send(){
 					   i.className="feed_list";
 					   i.innerHTML=str;
 					   i.id = "message_" + result.lastPost.messageId;
-					   i.style.display = "none";
 					   var mainlist = document.getElementById("mainlist");
 					   mainlist.insertBefore(i,mainlist.firstChild);
-					   $("#" + "message_" + result.lastPost.messageId).fadeIn(1000);
+					   var height=i.offsetHeight+100;
+					   i.style.display = "none";
+					   $("#mainlist").animate({marginTop:height+"px"},600,"swing",function(){
+						   mainlist.style.marginTop="70px";
+						   $("#" + "message_" + result.lastPost.messageId).fadeIn(1000);
+					   });
 					   $("#posts_amount").text($("#posts_amount").text()-0+1);
 					   document.all.conr.style.height=document.all.conl.offsetHeight+"px";
 				});
@@ -319,12 +327,13 @@ function forward_send(){
 var isCommentActive = false;
 var activeComment = "";
 var activeCommentMsgId;
-function comment(id,isnew){
+function comment(id,isnew,oldid){
 	var elementname;
 	if(isnew){
 		elementname = "commentlist_" + id;
 	} else {
 		elementname = "commentlist_pre_" + id;
+		id=oldid;
 	}
 	if(isCommentActive) {
 		$("#" + activeComment).slideUp(1000);
