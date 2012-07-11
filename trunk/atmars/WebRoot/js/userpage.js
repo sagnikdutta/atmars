@@ -78,11 +78,11 @@ function Sync(){
 						   if(myMsg[i].original.image!=null){
 							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + myMsg[i].original.image + '" width="300"></div></p>';
 						   }
-						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + myMsg[i].original.messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + myMsg[i].original.messageId + '" onClick="comment(this.name,false)">Comment</a></span>' + myMsg[i].original.timeDescription + '&nbsp;&nbsp;&nbsp;';
+						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + myMsg[i].original.messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + myMsg[i].messageId + '" onClick="comment(this.name,false,' + myMsg[i].original.messageId + ')">Comment</a></span>' + myMsg[i].original.timeDescription + '&nbsp;&nbsp;&nbsp;';
 						   if(myMsg[i].original.position!=null && myMsg[i].original.position!=""){
 							   str = str + 'From ' + myMsg[i].original.position;
 						   }
-						   str = str + '</p><div id="commentlist_pre_' + myMsg[i].original.messageId + '" class="commentlist"></div></div></p>';
+						   str = str + '</p><div id="commentlist_pre_' + myMsg[i].messageId + '" class="commentlist"></div></div></p>';
 					   }
 					   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + myMsg[i].messageId + '" onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + myMsg[i].messageId + '" onClick="comment(this.name,true)">Comment</a></span>' + myMsg[i].timeDescription + '&nbsp;&nbsp;&nbsp;';
 					   if(myMsg[i].position!=null && myMsg[i].position!=""){
@@ -108,12 +108,13 @@ function forward_send(){
 var isCommentActive = false;
 var activeComment = "";
 var activeCommentMsgId;
-function comment(id,isnew){
+function comment(id,isnew,oldid){
 	var elementname;
 	if(isnew){
 		elementname = "commentlist_" + id;
 	} else {
 		elementname = "commentlist_pre_" + id;
+		id=oldid;
 	}
 	if(isCommentActive) {
 		$("#" + activeComment).slideUp(1000);
