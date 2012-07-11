@@ -26,6 +26,7 @@ public class User implements java.io.Serializable {
 	private boolean confirm;
 	
 	private boolean alreadyFollowing=false;
+	private boolean isSelf=false;
 	
 	private Set messages = new HashSet(0);
 	private Set followsForFollowingId = new HashSet(0);
@@ -222,6 +223,15 @@ public class User implements java.io.Serializable {
 	public void setAlreadyFollowing(boolean alreadyFollowing) {
 		this.alreadyFollowing = alreadyFollowing;
 	}
+	
+	public boolean getIsSelf() {
+		return isSelf;
+	}
+
+	public void setIsSelf(boolean isSelf) {
+		this.isSelf = isSelf;
+	}
+
 	public void MakeAllSetNull()
 	{
 		this.messages = null;
@@ -229,6 +239,5 @@ public class User implements java.io.Serializable {
 		this.comments = null;
 		this.favorites = null;
 		this.followsForFollowedId = null;
-		this.password=null;
 	}
 }

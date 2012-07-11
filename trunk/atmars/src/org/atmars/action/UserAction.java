@@ -2,34 +2,15 @@ package org.atmars.action;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
-
-import org.apache.struts2.ServletActionContext;
-import org.atmars.dao.FollowDAO;
 import org.atmars.dao.User;
-import org.atmars.dao.UserDAO;
-import org.atmars.service.Jmail;
-import org.atmars.service.UserServiceImpl;
-import org.atmars.service.interfaces.UserService;
-import org.hibernate.classic.Session;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 
 public class UserAction extends BaseAction {
-
+	private static final long serialVersionUID = 1L;
 	private File upload;
 	private String uploadFileName;
 	private String uploadContentType;
@@ -41,34 +22,32 @@ public class UserAction extends BaseAction {
 	private boolean gender;
 
 	private int hisId;
-	
-	public String execute() {
+
+	public String execute_showLoginPage() {
 		super.InitAction();
 		ActionContext ctx = ActionContext.getContext();
 		Map session = ctx.getSession();
-		session.put("userList", u_service.GetNewRegisterUsers());
+		session.put("userList", uService.GetNewRegisterUsers());
 		return "success";
 	}
 
 	public String performRegister() throws IOException {
-		
+
 		super.InitAction();
-		
+
 		User u = new User();
 		boolean avalible = true;
-		Integer usr_id = (Integer) u_service.getId(this.email);
-		if(usr_id!=null)
-		{
-			avalible= false;
+		User alreadyExistUser = uService.getUserInfoByEmail(email);
+		if (alreadyExistUser != null) {
+			avalible = false;
 		}
-		List l = u_service.getUserDAO().findByNickname(this.nickname);
-		if(l!=null&&l.size()>0)
-		{
-			avalible= false;
+		alreadyExistUser = uService.getUserInfoByNickname(nickname);
+		if (alreadyExistUser != null) {
+			avalible = false;
 		}
 		if (avalible) {
-			u_service.register(email, password, nickname, gender);
-			u = (User) u_service.getUserInfoByEmail(this.email).get(0);
+			uService.register(email, password, nickname, gender);
+			u =  uService.getUserInfoByEmail(this.email);
 			u.setImage("image\\default.jpg");
 			System.out.println("the user get");
 			System.out.println(u.getUserId());
@@ -81,9 +60,10 @@ public class UserAction extends BaseAction {
 					System.out.println("user direction created\n");
 				}
 				int index = uploadFileName.lastIndexOf(".");
-				String fileType=uploadFileName.substring(index+1);
+				String fileType = uploadFileName.substring(index + 1);
 				System.out.println(fileType);
-				String filename = String.valueOf(System.currentTimeMillis())+"."+fileType;
+				String filename = String.valueOf(System.currentTimeMillis())
+						+ "." + fileType;
 				System.out.println("file name is " + filename);
 				String fn = dir + filename;
 				FileOutputStream fos = new FileOutputStream(fn);
@@ -94,56 +74,55 @@ public class UserAction extends BaseAction {
 					fos.write(buffer, 0, count);
 				}
 				fos.close();
-				imageURI = "image/"+String.valueOf(u.getUserId())+"/"+filename;
+				imageURI = "image/" + String.valueOf(u.getUserId()) + "/"
+						+ filename;
 				u.setImage(imageURI);
 
 			} else {
 				u.setImage("image/default.png");
 			}
 			u.setConfirm(false);
-			u_service.updateUserInfo(u);
+			uService.updateUserInfo(u);
 
-			Jmail jmail= new Jmail();
-			jmail.sendEmail(u.getEmail(), u.getNickname(), u.getTime());
-			
+			jMail.sendEmail(u.getEmail(), u.getNickname(), u.getTime());
+
 			return "wait_confirm";
 		}
 		return "error";
 	}
 
 	public String performLogin() {
-		
+
 		super.InitAction();
-		
+
 		ActionContext ctx = ActionContext.getContext();
 		Map session = ctx.getSession();
-		
-		if (u_service.checkLogin(this.email, this.password))
-		{
-			User u = (User) u_service.getUserInfoByEmail(this.email).get(0);
-			if(u.getConfirm())
-			{
-				session.put("user", u);		
+
+		if (uService.checkLogin(this.email, this.password)) {
+			User u =  uService.getUserInfoByEmail(this.email);
+			if (u.getConfirm()) {
+				session.put("user", u);
 				return "login_success";
+			} else {
+				session.put("error",
+						"this account is waiting for email confirm");
 			}
-			else{
-				session.put("error", "this account is waiting for email confirm");
-			}
+		} else {
+			session.put("error",
+					"Sorry, account does not exist\nor password is wrong");
 		}
-		else{
-			session.put("error", "Sorry, the account with\n this keycode was not found.");	
-		}	
 		return "login_fail";
 	}
 
 	public String AddFollow() {
-		
+
 		super.InitAction();
-		
-		u_service.addFollowing(current_usr_from_session.getUserId(), this.hisId);
-		
+
+		uService
+				.addFollowing(currentUserFromSession.getUserId(), this.hisId);
+
 		return "add_follow_success";
-		
+
 	}
 
 	public String getEmail() {
@@ -181,9 +160,6 @@ public class UserAction extends BaseAction {
 	public void setImageURI(String imageURI) {
 		this.imageURI = imageURI;
 	}
-
-
-	
 
 	public int getHisId() {
 		return hisId;

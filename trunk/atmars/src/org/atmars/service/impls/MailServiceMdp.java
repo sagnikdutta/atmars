@@ -1,4 +1,4 @@
-package org.atmars.service;
+package org.atmars.service.impls;
 
 import java.util.Properties;
 

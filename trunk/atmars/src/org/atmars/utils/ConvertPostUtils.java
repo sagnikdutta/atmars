@@ -1,6 +1,6 @@
-package org.atmars.service;
+package org.atmars.utils;
 
-public class FaceServiceImpl {
+public class ConvertPostUtils {
 	static public String replaceFace(String text)
 	{
 		 String[] faces={"smile","naughty","cry","angry","embarrass","crazy","effort","despise","lovely","laugh","titter","surprise","orz","unhappy","wronged"};
@@ -12,5 +12,9 @@ public class FaceServiceImpl {
 	    	text=text.replace(fullface, imgsrc);
 	     }//for
 	    return text;
+	}
+	static public String replaceAtMarkToHTML(String input)
+	{
+		return input;
 	}
 }
