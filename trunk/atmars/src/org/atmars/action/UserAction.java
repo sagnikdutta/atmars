@@ -15,6 +15,7 @@ import org.apache.struts2.ServletActionContext;
 import org.atmars.dao.FollowDAO;
 import org.atmars.dao.User;
 import org.atmars.dao.UserDAO;
+import org.atmars.service.Jmail;
 import org.atmars.service.UserServiceImpl;
 import org.atmars.service.interfaces.UserService;
 import org.hibernate.classic.Session;
@@ -67,7 +68,6 @@ public class UserAction extends BaseAction {
 		}
 		if (avalible) {
 			u_service.register(email, password, nickname, gender);
-			System.out.println(this.gender);
 			u = (User) u_service.getUserInfoByEmail(this.email).get(0);
 			u.setImage("image\\default.jpg");
 			System.out.println("the user get");
@@ -100,13 +100,13 @@ public class UserAction extends BaseAction {
 			} else {
 				u.setImage("image/default.png");
 			}
+			u.setConfirm(false);
 			u_service.updateUserInfo(u);
 
-			ActionContext ctx = ActionContext.getContext();
-			Map session = ctx.getSession();
-			session.put("user", u);
-
-			return "register_success";
+			Jmail jmail= new Jmail();
+			jmail.sendEmail(u.getEmail(), u.getNickname(), u.getTime());
+			
+			return "wait_confirm";
 		}
 		return "error";
 	}
@@ -118,14 +118,21 @@ public class UserAction extends BaseAction {
 		ActionContext ctx = ActionContext.getContext();
 		Map session = ctx.getSession();
 		
-		if (u_service.checkLogin(this.email, this.password)) {
+		if (u_service.checkLogin(this.email, this.password))
+		{
 			User u = (User) u_service.getUserInfoByEmail(this.email).get(0);
-			session.put("user", u);		
-			return "login_success";
+			if(u.getConfirm())
+			{
+				session.put("user", u);		
+				return "login_success";
+			}
+			else{
+				session.put("error", "this account is waiting for email confirm");
+			}
 		}
-		
-		String errorString="Sorry, the account with\n this keycode was not found.";
-		session.put("error", errorString);		
+		else{
+			session.put("error", "Sorry, the account with\n this keycode was not found.");	
+		}	
 		return "login_fail";
 	}
 

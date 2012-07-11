@@ -7,6 +7,10 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
+<%@page import="org.atmars.dao.User"%>
+<%
+	java.util.List<User> userList=(java.util.List<User>) session.getAttribute("userList");
+%>
 
 <!DOCTYPE HTML>
 <html>
@@ -43,14 +47,14 @@ a img { /* this selector removes the default blue border displayed in some brows
 /* ~~ Styling for your site's links must remain in this order - including the group of selectors that create the hover effect. ~~ */
 a:link {
 	color:#414958;
-	text-decoration: underline; /* unless you style your links to look extremely unique, it's best to provide underlines for quick visual identification */
+	text-decoration: none; /* unless you style your links to look extremely unique, it's best to provide underlines for quick visual identification */
 }
 a:visited {
 	color: #4E5869;
 	text-decoration: underline;
 }
 a:hover, a:active, a:focus { /* this group of selectors will give a keyboard navigator the same hover experience as the person using a mouse. */
-	text-decoration: none;
+	text-decoration: underline;
 }
 
 /* ~~ this container surrounds all other divs giving them their percentage-based width ~~ */
@@ -144,19 +148,30 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
     box-shadow: 0 1px 3px rgba(0,0,0,.35);
 }
 
+.login .registerbt:active{
+	color:#CCCCCC;
+	margin:margin:42px 0px 0px 34px;
+}
+
 .login .loginbt{
-	width:110px;
+	width:100px;
 	height:30px;
 	margin:20px 0px 0px 32px;
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:18px;
-	background:#fff;
+	background:#80c50c;
 	background-position:center;
-	color:#333333;
+	color:#fff;
 	border:0;
-	border-radius: 8px;
+	border-radius: 3px;
     box-shadow: 0 1px 3px rgba(0,0,0,.35);
 }
+
+.login .loginbt:active{
+	color:#cccccc;
+	margin:22px 0px 0px 34px;
+}
+
 .login .textinp{
 	color:#000;
 	border:medium solid #ddd;
@@ -218,6 +233,12 @@ li {
 	width:50px;
 	height:50px;
 }
+
+.person_name{
+	font-size:8px;
+}
+
+
 
 .tList_mdu2 {
 	height: 570px;
@@ -352,7 +373,6 @@ dd{
 -->
 </style></head>
 
-</style></head>
 
 <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript">
@@ -363,10 +383,10 @@ dd{
 		  var newMsg = response.new_Messages;
 		  var listr =document.getElementById("listr");
 		  for(var i = 1; i<newMsg.length; i++){
-				   var str='<div class="item"><div class="twit_item"><div class="twit_item_pic"><a href="#"><img src="'+newMsg[i].user.image+'" class="twit_item_img"></a></div><div class="twit_item_content"><a href="#" class="twit_item_name">'+'cloudzfy'+':</a>'+newMsg[i].text+'<div class="twit_item_time">'+newMsg[i].time+'</div></div></div></div>';
+				   var str='<div class="item"><div class="twit_item"><div class="twit_item_pic"><a href="#"><img src="'+newMsg[i].user.image+'" class="twit_item_img"></a></div><div class="twit_item_content"><a href="#" class="twit_item_name">'+newMsg[i].user.nickname+':</a>'+newMsg[i].text+'<div class="twit_item_time">'+newMsg[i].timeDescription+'</div></div></div></div>';
 				   listr.innerHTML= listr.innerHTML+str;
 			  }
-			  setTimeout("setInterval('weiboqiang()',1000)",10);
+			  setTimeout("setInterval('weiboqiang()',5000)",10);
 	   });
   }
   
@@ -378,10 +398,9 @@ dd{
 	  var top=listr.offsetTop;
 		  $.get("getNewestMessage.action?currentNewestMessageId="+newestmessage,null,function(result){
 				  var response=result;
-				  if(response.error==false){
+				  if(response.newestMessage_Now.newestState==true){
 				  newestmessage=response.newestMessage_Now.messageId;
-				  var hehe=response.newestMessage_Now.user.image;
-				  var str='<div class="twit_item"><div class="twit_item_pic"><a href="#"><img src="'+response.newestMessage_Now.image+'" class="twit_item_img"></a></div><div class="twit_item_content"><a href="#" class="twit_item_name">'+'cloudzfy'+':</a>'+response.newestMessage_Now.text+'<div class="twit_item_time">'+response.newestMessage_Now.time+'</div></div></div>';
+				  var str='<div class="twit_item"><div class="twit_item_pic"><a href="#"><img src="'+response.newestMessage_Now.user.image+'" class="twit_item_img"></a></div><div class="twit_item_content"><a href="#" class="twit_item_name">'+response.newestMessage_Now.user.nickname+':</a>'+response.newestMessage_Now.text+'<div class="twit_item_time">'+response.newestMessage_Now.timeDescription+'</div></div></div>';
 
 				  
 				  var firstitem=document.createElement("div");
@@ -394,24 +413,13 @@ dd{
 				  }
 				  top=0-listr.firstChild.offsetHeight;
 				  listr.style.top=top+"px";
-				  time=setInterval('showitem()',20);
+				  $("#listr").animate({top:0},3000);
 				  }
 				  
 		  });
   }
   
-  function showitem(){
-   var listr=document.getElementById("listr");
-	  var top=listr.offsetTop;
-	  if(top<0)
-	  {
-		  top=top+0.5;
-		  listr.style.top=top+"px";
-	  }
-	  else{
-	  clearTimeout(time);
-	  }
-	 }
+ 
   function email_text_onfocus(){
 		var email=document.getElementById("email");
 		email.placeholder="";
@@ -464,22 +472,23 @@ dd{
        </dl>
        <dd>
          <ul id="userlist">
-          <li ><a href="javascript:void(0)"><img src="weibo-img/user_0.png" class="person_img" ></a><a href="javascript:void(0)" style=" font-size:9px; text-decoration:none">Anna</a> </li>
-
-           <li ><a href="javascript:void(0)"><img src="weibo-img/user_1.png" class="person_img" ></a><a href="javascript:void(0)" style=" font-size:9px; text-decoration:none">Bella</a> </li>
-
-           <li ><a href="javascript:void(0)"><img src="weibo-img/user_2.png" class="person_img" ></a><a href="javascript:void(0)" style=" font-size:9px; text-decoration:none">Dale</a> </li>
-
-           <li ><a href="javascript:void(0)"><img src="weibo-img/user_3.png" class="person_img" ></a><a href="javascript:void(0)" style=" font-size:9px; text-decoration:none">Bill</a> </li>
-
-           <li ><a href="javascript:void(0)"><img src="weibo-img/user_4.png" class="person_img" ></a><a href="javascript:void(0)" style=" font-size:9px; text-decoration:none">Cary</a> </li>
-
-           <li ><a href="javascript:void(0)"><img src="weibo-img/user_5.png" class="person_img" ></a><a href="javascript:void(0)" style=" font-size:9px; text-decoration:none">Fred</a> </li>
-
-           <li ><a href="javascript:void(0)"><img src="weibo-img/user_6.png" class="person_img" ></a><a href="javascript:void(0)" style=" font-size:9px; text-decoration:none">Sam</a> </li>
-
-           <li ><a href="javascript:void(0)"><img src="weibo-img/user_7.png" class="person_img" ></a><a href="javascript:void(0)" style=" font-size:9px; text-decoration:none">Timmy</a> </li>
-
+         
+         <%int i=0;
+         int count=9;
+         if(userList.size()<9)
+            { count=userList.size(); }
+            while(i<count)
+         {
+          %>
+         
+          <li ><a href="javascript:void(0)"><img src="<%=((User) userList.get(i)).getImage()%>" class="person_img" ></a><a href="javascript:void(0)" class="person_name"><%=((User) userList.get(i)).getNickname()%></a> </li>
+          <% 
+          i++;
+          }
+           %>
+         
+         
+         
          </ul>
        </dd>
     </div>
@@ -498,8 +507,8 @@ dd{
   </div>
  
    <div class="login">
+   <a href="register.jsp"><button class="registerbt">Register Now</button></a>
     <form name="form1" method="post" action="performLogin">
-		<a href="register.jsp"><button class="registerbt">Register Now</button></a>
       <table width="267" border="0"  style="margin-top:20px">
         <tr>
           <td><label for="username">

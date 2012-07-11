@@ -40,6 +40,9 @@
         <property name="postCount" type="integer">
             <column name="postCount" not-null="true" />
         </property>
+        <property name="confirm" type="boolean">
+            <column name="confirm" not-null="true" />
+        </property>
         <set name="messages" inverse="true">
             <key>
                 <column name="user_id" />

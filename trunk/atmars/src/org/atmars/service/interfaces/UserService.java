@@ -13,6 +13,7 @@ public interface UserService {
 	public boolean checkLogin(String username, String password);
 	public boolean isAdministrator(String username);
 	public boolean addFollowing(Integer myid, Integer hisid);
+	public boolean alreadyFollowing(int me,int him);
 	public User getUserInfo(Integer id);
 	
 	public Integer getId(String username);

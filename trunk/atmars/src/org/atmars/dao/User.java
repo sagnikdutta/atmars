@@ -23,6 +23,10 @@ public class User implements java.io.Serializable {
 	private Integer followerCount;
 	private Integer followingCount;
 	private Integer postCount;
+	private boolean confirm;
+	
+	private boolean alreadyFollowing=false;
+	
 	private Set messages = new HashSet(0);
 	private Set followsForFollowingId = new HashSet(0);
 	private Set comments = new HashSet(0);
@@ -37,7 +41,8 @@ public class User implements java.io.Serializable {
 
 	/** minimal constructor */
 	public User(String email, String password, String nickname, boolean gender,
-			Integer followerCount, Integer followingCount, Integer postCount) {
+			Integer followerCount, Integer followingCount, Integer postCount,
+			boolean confirm) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
@@ -45,14 +50,15 @@ public class User implements java.io.Serializable {
 		this.followerCount = followerCount;
 		this.followingCount = followingCount;
 		this.postCount = postCount;
+		this.confirm = confirm;
 	}
 
 	/** full constructor */
 	public User(String email, String password, String nickname, boolean gender,
 			String image, Integer priority, Date time, Integer followerCount,
-			Integer followingCount, Integer postCount, Set messages,
-			Set followsForFollowingId, Set comments, Set favorites,
-			Set followsForFollowedId) {
+			Integer followingCount, Integer postCount, boolean confirm,
+			Set messages, Set followsForFollowingId, Set comments,
+			Set favorites, Set followsForFollowedId) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
@@ -63,6 +69,7 @@ public class User implements java.io.Serializable {
 		this.followerCount = followerCount;
 		this.followingCount = followingCount;
 		this.postCount = postCount;
+		this.confirm = confirm;
 		this.messages = messages;
 		this.followsForFollowingId = followsForFollowingId;
 		this.comments = comments;
@@ -160,6 +167,14 @@ public class User implements java.io.Serializable {
 		this.postCount = postCount;
 	}
 
+	public boolean getConfirm() {
+		return this.confirm;
+	}
+
+	public void setConfirm(boolean confirm) {
+		this.confirm = confirm;
+	}
+
 	public Set getMessages() {
 		return this.messages;
 	}
@@ -199,12 +214,20 @@ public class User implements java.io.Serializable {
 	public void setFollowsForFollowedId(Set followsForFollowedId) {
 		this.followsForFollowedId = followsForFollowedId;
 	}
+
+	public boolean getAlreadyFollowing() {
+		return alreadyFollowing;
+	}
+
+	public void setAlreadyFollowing(boolean alreadyFollowing) {
+		this.alreadyFollowing = alreadyFollowing;
+	}
 	public void MakeAllSetNull()
 	{
-		this.comments=null;
-		this.favorites=null;
-		this.followsForFollowedId=null;
-		this.followsForFollowingId=null;
-		this.messages=null;
+		this.messages = null;
+		this.followsForFollowingId = null;
+		this.comments = null;
+		this.favorites = null;
+		this.followsForFollowedId = null;
 	}
 }

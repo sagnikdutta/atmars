@@ -30,7 +30,10 @@ public class UserDetailAction extends BaseAction {
 			Query q = s.createQuery(queryString);
 			List l = q.list();
 			for (Object obj : l) {
-				search.add((User) obj);
+				User u = (User) obj;
+				if(u_service.alreadyFollowing(current_usr_from_session.getUserId(), u.getUserId()))
+					u.setAlreadyFollowing(true);
+				search.add(u);
 			}
 		}
 		ActionContext ctx = ActionContext.getContext();

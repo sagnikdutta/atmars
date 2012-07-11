@@ -2,6 +2,8 @@ package org.atmars.interceptor;
 
 import java.util.Map;
 
+import org.atmars.dao.User;
+
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
@@ -19,12 +21,12 @@ public class AuthorizationInterceptor extends AbstractInterceptor {
 	public String intercept(ActionInvocation arg0) throws Exception {
 		ActionContext ctx = arg0.getInvocationContext();
 		Map session = ctx.getSession();
-		String email = (String)session.get("email");
-		if(email !=null && !email.equals(""))
+		User u  = (User)session.get("user");
+		if(u !=null)
 		{
 			return arg0.invoke();
 		}
-		return Action.LOGIN;
+		return "login";
 	}
 
 }

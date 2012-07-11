@@ -266,7 +266,7 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
       </tr>
     </table>
 
-    <form name="form1" method="post" action="performRegister" enctype="multipart/form-data">
+    <s:form name="form1" method="post" action="performRegister" enctype="multipart/form-data">
       
       <table width="650" height="190" border="0" class="table" >
         <tr>
@@ -308,7 +308,7 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
           <img id="image" src="register-img/uploadphoto.png" onClick="image_file.click()" class="upimg"/>
           </td>
           <td>
-           <input id="image_file" type="file" style="visibility:collapse" onchange="handleFiles(this.files)" />
+           <s:file id="image_file" name="upload" type="file" style="visibility:collapse" onchange="handleFiles(this.files)" />
           </td>
         </tr>
       </table>
@@ -316,7 +316,7 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
         <input type="submit" name="submit" id="submit" value="Submit" class="submitbt" ">
       </p>
 
-    </form>
+    </s:form>
     <table width="780" height="200" border="0" background="register-img/image.png">
       <tr>
         <td>&nbsp;</td>

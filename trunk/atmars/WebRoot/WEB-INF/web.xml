@@ -17,4 +17,22 @@
   <filter-mapping>
   	<filter-name>struts2</filter-name>
   	<url-pattern>/*</url-pattern>
-  </filter-mapping></web-app>
+  </filter-mapping>
+  <!-- 
+  <error-page>
+             <error-code>404</error-code>
+             <location>/ErrorPage404.jsp</location>
+</error-page>
+<error-page>
+             <error-code>500</error-code>
+             <location>/ErrorPage500.jsp</location>
+</error-page>
+
+
+<%
+    response.setStatus(200); // 200 = HttpServletResponse.SC_OK
+%>
+
+
+ -->
+  </web-app>

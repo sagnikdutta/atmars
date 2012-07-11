@@ -77,7 +77,10 @@ public class SendMessageAction extends BaseAction{
 			original.setFavorites(null);
 			lastPost.setOriginal(original);
 		}
-		
+		ActionContext ctx = ActionContext.getContext();
+		Map<String, Object> session = ctx.getSession();
+		User u = u_service.getUserInfo(current_usr_from_session.getUserId());
+		session.put("user", u);
 		return "success";
 	}
 	

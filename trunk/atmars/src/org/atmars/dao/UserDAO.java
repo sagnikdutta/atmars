@@ -33,6 +33,7 @@ public class UserDAO extends HibernateDaoSupport {
 	public static final String FOLLOWER_COUNT = "followerCount";
 	public static final String FOLLOWING_COUNT = "followingCount";
 	public static final String POST_COUNT = "postCount";
+	public static final String CONFIRM = "confirm";
 
 	protected void initDao() {
 		// do nothing
@@ -132,6 +133,10 @@ public class UserDAO extends HibernateDaoSupport {
 
 	public List findByPostCount(Object postCount) {
 		return findByProperty(POST_COUNT, postCount);
+	}
+
+	public List findByConfirm(Object confirm) {
+		return findByProperty(CONFIRM, confirm);
 	}
 
 	public List findAll() {
