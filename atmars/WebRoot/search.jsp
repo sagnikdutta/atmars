@@ -348,12 +348,6 @@ li {
 	margin-right: 20px;
 }
 
-.item_r a:hover {
-	background-color: #81d300;
-	border-color: #4ec000;
-	color: #fff;
-}
-
 .addbtn {
 	float: right;
 	display: inline-block;
@@ -367,8 +361,31 @@ li {
 	border-color: #D5F7C5;
 	color: #389A0A;
 	text-decoration: none;
+	width:75px;
+	text-align:center;
 }
 
+.addbtn:hover {
+	background-color: #81d300;
+	border-color: #4ec000;
+	color: #fff;
+}
+
+.addsuccessbtn{
+	float: right;
+	display: inline-block;
+	border: 1px solid;
+	border-radius: 2px;
+	padding: 0 5px;
+	height: 18px;
+	line-height: 18px;
+	cursor: pointer;
+	background-color: #f3f3f3;
+	border-color: #dddddd;
+	color: #666666;
+	text-decoration: none;
+	cursor:default;
+}
 /* ~~ This grouped selector gives the lists in the .content area space ~~ */
 
 /* ~~ miscellaneous float/clear classes ~~ */
@@ -394,9 +411,18 @@ li {
 -->
 </style>
 </head>
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
 <script>
 	function Sync() {
-		document.all.conl.style.height = document.all.conr.offsetHeight + "px";
+		var bheight= window.screen.availHeight-160;
+		var conrheight= document.all.conr.offsetHeight;
+		if(bheight>conrheight){
+			document.all.conl.style.height = bheight+ "px";
+			document.all.conr.style.height = bheight+ "px";
+		}
+		else{
+			document.all.conl.style.height=conrheight+"px";
+		}
 	}
 </script>
 <body onLoad="Sync()">
@@ -408,7 +434,7 @@ li {
 					<img src="homepage-img/homelogo.png" height="34" width="100" />
 				</div>
 				<ul class="list">
-					<li><a href="homepage.jsp" class="gbgt current"
+					<li><a href="homepage" class="gbgt current"
 						style="color:#fff; padding-left:5px"> Homepage </a>
 					</li>
 					<li>
@@ -417,10 +443,10 @@ li {
 							Search</div></li>
 				</ul>
 				<ul class="right">
-					<li><a href="homepage.jsp" class="gbgt"
+					<li><a href="homepage" class="gbgt"
 						style="color:#fff; padding-left:6px; padding-right:6px">
 							<%=user.getNickname() %> </a></li>
-					<li style=" width:90px;" class="current"><a href="" class="gbgt"
+					<li style=" width:90px;" class="current"><a href="logout" class="gbgt"
 						style="color:#fff; padding-left:14px"> Logout </a></li>
 				</ul>
 			</div>
@@ -488,9 +514,32 @@ li {
 							</dl>
 						</div>
 						<div class="item_r">
-							<p class="follow">
-								<a href="javascript:void(0)" class="addbtn"
-									style="text-decoration:none">+Follow</a>
+							<p class="follow" id="add<%=((User) list_search.get(i)).getUserId()%>">
+							    <%
+							    if(((User) list_search.get(i)).getAlreadyFollowing()==false)
+							    {
+							     %>
+								<a href="javascript:void(0)" class="addbtn" style="text-decoration:none" name="<%=((User) list_search.get(i)).getUserId()%>" onClick="addfollow(this.name)">+Follow</a>
+                                <script type="text/javascript">
+								    function addfollow(userid){
+										$.get("addFollow.action?hisId="+userid,null,function(result){
+											if(result.isSuccess==true){
+												var addid="add"+userid;
+												var follow=document.getElementById(addid);
+												follow.innerHTML='<a href="javascript:void(0)" class="addsuccessbtn" style="text-decoration:none"><img src="search-img/success.png" style="width:12px; height:12px"/>Followed</a>';
+											}
+										});
+									}
+								</script>
+								<%
+								}
+								if(((User) list_search.get(i)).getAlreadyFollowing()==true)
+							    {
+								%>
+								<a href="javascript:void(0)" class="addsuccessbtn" style="text-decoration:none"><img src="search-img/success.png" style="width:12px; height:12px"/>Followed</a>
+								<%
+								}
+								 %>
 							</p>
 						</div>
 					</div>

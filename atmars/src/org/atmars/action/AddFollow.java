@@ -1,5 +1,11 @@
 package org.atmars.action;
 
+import java.util.Map;
+
+import org.atmars.dao.User;
+
+import com.opensymphony.xwork2.ActionContext;
+
 public class AddFollow extends BaseAction {
 	private int hisId;
 	private boolean isSuccess;
@@ -16,6 +22,10 @@ public class AddFollow extends BaseAction {
 			isSuccess = false;
 			description = "already following";
 		}
+		ActionContext ctx = ActionContext.getContext();
+		Map<String, Object> session = ctx.getSession();
+		User u = u_service.getUserInfo(current_usr_from_session.getUserId());
+		session.put("user", u);
 		return "success";
 	}
 

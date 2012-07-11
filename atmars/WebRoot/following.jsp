@@ -299,7 +299,15 @@ li {
 </head>
 <script>
 	function Sync() {
-		document.all.conl.style.height = document.all.conr.offsetHeight + "px";
+		var bheight= window.screen.availHeight-160;
+		var conrheight= document.all.conr.offsetHeight;
+		if(bheight>conrheight){
+			document.all.conl.style.height = bheight+ "px";
+			document.all.conr.style.height = bheight+ "px";
+		}
+		else{
+			document.all.conl.style.height=conrheight+"px";
+		}
 	}
 </script>
 <body onLoad="Sync()">
@@ -311,7 +319,7 @@ li {
 					<img src="homepage-img/homelogo.png" height="34" width="100" />
 				</div>
 				<ul class="list">
-					<li><a href="homepage.jsp"
+					<li><a href="homepage"
 						class="gbgt current" style="color:#fff; padding-left:5px">
 							Homepage </a></li>
 					<li><a href="search"
@@ -319,13 +327,13 @@ li {
 					</li>
 				</ul>
 				<ul class="right">
-					<li><a href="homepage.jsp"
+					<li><a href="homepage"
 						class="gbgt"
 						style="color:#fff; padding-left:6px; padding-right:6px">
 							<%=user.getNickname() %> </a>
 					</li>
 					<li style=" width:90px;"><a
-						href="" class="gbgt"
+						href="logout" class="gbgt"
 						style="color:#fff; padding-left:14px"> Logout </a>
 					</li class="current">
 				</ul>

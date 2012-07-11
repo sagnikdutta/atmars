@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(encryptedPassword);
 		user.setNickname(nickname);
 		user.setGender(gender);
+		
 		user.setFollowerCount(0);
 		user.setFollowingCount(0);
 		user.setPostCount(0);
@@ -125,6 +126,10 @@ public class UserServiceImpl implements UserService {
 		if(l==null||l.size()==0)
 		{
 			followDAO.save(follow);
+			me.setFollowingCount(me.getFollowingCount()+1);
+			userDAO.attachDirty(me);
+			him.setFollowerCount(him.getFollowerCount()+1);
+			userDAO.attachDirty(him);
 			return true;
 		}
 		return false;
@@ -171,5 +176,19 @@ public class UserServiceImpl implements UserService {
 			l.add((User) obj);
 		}
 		return l;
+	}
+
+	@Override
+	public boolean alreadyFollowing(int me, int him) {
+		String queryString="from Follow f where "
+				+"f.userByFollowingId.userId="+me
+				+" and f.userByFollowedId.userId="+him;
+		Session s = followDAO.getHibernateTemplate().getSessionFactory().openSession();
+		List l = s.createQuery(queryString).list();
+		if(l==null||l.size()==0)
+		{
+			return false;
+		}
+		return true;
 	}
 }

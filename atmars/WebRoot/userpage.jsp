@@ -12,7 +12,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Atmars UserPage</title>
+<title>Atmars Homepage</title>
 
 <link rel="stylesheet" type="text/css" href="css/userpage.css">
 <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
@@ -23,7 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <body onLoad="Sync()">
 
-<div class="container" id="1">
+<div class="container" id="<s:property value="hisId" />">
   <header class="header">
     <div class="nav">
       <div class="logo">

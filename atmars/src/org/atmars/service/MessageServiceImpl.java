@@ -37,7 +37,8 @@ public class MessageServiceImpl implements MessageService {
 				message.setText(text);
 				message.setSourceId(zhuanfaID);
 			} else {
-				String text2 = text + "//@" + m.getUser().getNickname() + ":"
+				String text2 = text 
+						+  "//" + "<a href=\"\""+ ">@"+m.getUser().getNickname()+"</a>"
 						+ m.getText();
 				message.setText(text2);
 				message.setSourceId(m.getSourceId());
@@ -47,7 +48,9 @@ public class MessageServiceImpl implements MessageService {
 			messageDAO.save(m);
 		}
 		messageDAO.save(message);
-
+		User u = userDAO.findById(userid);
+		u.setPostCount(u.getPostCount()+1);
+		userDAO.attachDirty(u);
 		// topic
 		int a, b = 0;
 		while (true) {
@@ -105,10 +108,9 @@ public class MessageServiceImpl implements MessageService {
 				+"and (m.messageId<"+String.valueOf(oldest_message_id)+")"
 				+" order by m.time desc";
 		}
-
-		List l = messageDAO.getHibernateTemplate().find(queryString);
-
-		return l;
+		Query q = messageDAO.getHibernateTemplate().getSessionFactory().openSession().createQuery(queryString);
+		q.setMaxResults(10);
+		return q.list();
 	}
 
 	@Override
@@ -142,11 +144,11 @@ public class MessageServiceImpl implements MessageService {
 	public List<Message> GetOriginalMessages(int userId,int cursor)
 	{
 		List<Message> originalMessages  = new ArrayList<Message>();
-		String queryString="from Message m where m.userId=" + userId;
+		String queryString="from Message m where m.user.userId=" + userId;
 		if(cursor==-1)
-			queryString+=" order by desc";
+			queryString+=" order by m.messageId desc";
 		else
-			queryString+=" and m.messageId<"+cursor+" order by desc";
+			queryString+=" and m.messageId<"+cursor+" order by m.messageId desc";
 		Session s = messageDAO.getHibernateTemplate().getSessionFactory().openSession();
 		Query q  = s.createQuery(queryString);
 		q.setMaxResults(10);
@@ -236,7 +238,7 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public List findNewestMessagesFromAllUsers() {
 		Session s = messageDAO.getSessionFactory().openSession();
-		String hql = "from Message m where m.sourceId=-1 order by m.time desc";
+		String hql = "from Message m where m.sourceId=-1 order by m.messageId desc";
 		Query q = s.createQuery(hql);
 		q.setMaxResults(6);
 		return q.list();
