@@ -68,7 +68,7 @@
            <img src="<s:property value="hisUser.image" />" width="132px" height="132px" />
          </div>
          <div class="user_detail">
-           <div class="user_name"><s:property value="nickname" /></div>
+           <div class="user_name"><s:property value="hisUser.nickname" /></div>
            <div id="sex">
              <div >
                <img class="sex_img" src="userpage-img/<s:property value="hisUser.gender" />.png"/>

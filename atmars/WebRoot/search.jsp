@@ -50,17 +50,17 @@ a img {
 
 /* ~~ Styling for your site's links must remain in this order - including the group of selectors that create the hover effect. ~~ */
 a:link {
-	text-decoration: underline;
+	text-decoration: none;
 	/* unless you style your links to look extremely unique, it's best to provide underlines for quick visual identification */
 }
 
 a:visited {
-	text-decoration: underline;
+	text-decoration: none;
 }
 
 a:hover,a:active,a:focus {
 	/* this group of selectors will give a keyboard navigator the same hover experience as the person using a mouse. */
-	text-decoration: none;
+	text-decoration: underline;
 }
 
 /* ~~ this container surrounds all other divs giving them their percentage-based width ~~ */
@@ -315,6 +315,13 @@ li {
 	color: #79c5e9;
 }
 
+.item .person_name a {
+	color:#0066FF;
+}
+.item .person_name a:visited {
+	color:#0066FF;
+}
+
 .item .item_content {
 	font-size: 12px;
 	margin-top: 10px;
@@ -515,7 +522,7 @@ li {
 						<div class="item_r">
 							<p class="follow" id="add<%=((User) list_search.get(i)).getUserId()%>">
 							    <%
-							    if(((User) list_search.get(i)).getAlreadyFollowing()==false)
+							    if(((User) list_search.get(i)).getAlreadyFollowing()==false && ((User) list_search.get(i)).getIsSelf()==false)
 							    {
 							     %>
 								<a href="javascript:void(0)" class="addbtn" style="text-decoration:none" name="<%=((User) list_search.get(i)).getUserId()%>" onClick="addfollow(this.name)">+Follow</a>
@@ -532,7 +539,7 @@ li {
 								</script>
 								<%
 								}
-								if(((User) list_search.get(i)).getAlreadyFollowing()==true)
+								if(((User) list_search.get(i)).getAlreadyFollowing()==true  && ((User) list_search.get(i)).getIsSelf()==false)
 							    {
 								%>
 								<a href="javascript:void(0)" class="addsuccessbtn" style="text-decoration:none"><img src="search-img/success.png" style="width:12px; height:12px"/>Followed</a>
