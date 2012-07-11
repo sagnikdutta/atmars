@@ -3,6 +3,7 @@ package org.atmars.service;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -80,7 +81,8 @@ public class UserServiceImpl implements UserService {
 		user.setFollowerCount(0);
 		user.setFollowingCount(0);
 		user.setPostCount(0);
-
+		user.setTime(new Date());
+		
 		userDAO.save(user);
 		User u = (User) userDAO.findByExample(user).get(0);
 		Follow f = new Follow();

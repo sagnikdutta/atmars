@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.atmars.service.FaceServiceImpl;
+import org.atmars.service.TimeServiceImpl;
+
 /**
  * Message entity. @author MyEclipse Persistence Tools
  */
@@ -170,8 +173,13 @@ public class Message implements java.io.Serializable {
 	}
 	public void MakeAllSetNull()
 	{
-		this.user.MakeAllSetNull();
 		this.comments=null;
 		this.favorites=null;
+		if(this.original!=null)
+			this.original.MakeAllSetNull();
+		this.user.MakeAllSetNull();
+		this.timeDescription=TimeServiceImpl.getTimeDelay(this.time);
+		this.text = FaceServiceImpl.replaceFace(this.text);
+		
 	}
 }

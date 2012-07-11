@@ -295,10 +295,10 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
           <td height="60" align="left" valign="middle" style="color:#666666">Gender</td>
           <td>
           <div class="fragm">
-               <label><input type="radio" value="1" name="gender" id="rdoboy" class="ra" /> Male</label>
+               <label><input type="radio" value="true" name="gender" id="rdoboy" class="ra" /> Male</label>
           </div>
           <div class="fragm">
-               <label><input type="radio" value="2" name="gender" id="rdogirl" class="ra" />Female</label>
+               <label><input type="radio" value="false" name="gender" id="rdogirl" class="ra" />Female</label>
           </div>
           </td>
         </tr>

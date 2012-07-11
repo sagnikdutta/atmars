@@ -18,87 +18,8 @@ function Sync(){
 	var userpage=document.getElementById("mypage");
 	var url=document.URL;
 	userpage.innerHTML='<a href="'+url+'" >'+url+'</a>';
+	pageRefresh();
 }
-
-
- var upload_img = "null";
-		   var upload_filename = "null";
-		    function handleFiles(files){
-				var file = files[0];
-				upload_filename = files[0].name;
-	    		var reader = new FileReader();  
-	    		reader.onload = function(e){
-					$("#preview_image").attr("src",null);
-					upload_img = e.target.result;
-					var tmp = new Image();
-					tmp.setAttribute("src",e.target.result);
-					$("#preview_image").attr("src",e.target.result).load(function() {
-                        if(tmp.width<400){
-							$("#publish_image").width(tmp.width+10);
-							$("#publish_image").height(tmp.height+10);
-							$("#preview_image").width(tmp.width);
-							$("#preview_image").height(tmp.height);
-						} else {
-							$("#publish_image").width(400);
-							$("#publish_image").height(400*tmp.height/tmp.width);
-							$("#preview_image").width(390);
-							$("#preview_image").height($("#publish_image").height()-10);
-						}
-                    });
-    			}
-    			reader.readAsDataURL(file);  
-    		}
-			$("#image_button").click(function(e) {
-                if(upload_filename == "null") {
-					image_file.click();
-				} else {
-					$("#image_img").attr("src","homepage-img/image_0.png");
-					upload_filename = "null";
-					upload_img = "null";
-					$("#image_file").attr("value","");
-					$("#preview_image").width(null);
-					$("#preview_image").height(null);
-				}
-            });
-			
-function publish(){
-		  $.post("publish.action",{"messageid":"-1","text":$("#publish_text").val(),"position":$("#positionInfo").text(),"upload":upload_img,"uploadFileName":upload_filename},function(result){
-			  var str = '<dt class="face"><a href="javascript:void(0);"><img src="';
-			  if(result.lastPost.user.image!=null){
-					str = str + result.lastPost.user.image;
-				}else{
-					 str = str + 'homepage-img/upimg.png';
-				 }
-					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="javascript:void(0);" class="author_name">' + result.lastPost.user.nickname + '</a>:&nbsp;' + result.lastPost.text + '</p>';
-					   if(result.lastPost.image!=null){
-						   str = str + '<p><div style="margin-left:10px; margin-top:5px;"><img src="' + result.lastPost.image + '" style="width:300px"></div></p>';
-					   }
-					   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="comment(this.name,true)">Comment</a></span>' + result.lastPost.timeDescription + '&nbsp;&nbsp;&nbsp;';
-					   if(result.lastPost.position!=null && result.lastPost.position!=""){
-						   str = str + 'From ' + result.lastPost.position;
-					   }
-					   str = str + '</p><div id="commentlist_' + result.lastPost.messageId + '" class="commentlist"></div></dd>';
-					   var i = document.createElement("dl");
-					   i.className="feed_list";
-					   i.innerHTML=str;
-					   i.id="message_" + result.lastPost.messageId;
-					   i.style.display = "none";
-					   var mainlist = document.getElementById("mainlist");
-					   mainlist.insertBefore(i,mainlist.firstChild);
-					   $("#" + "message_" + result.lastPost.messageId).fadeIn(1000);
-					   $("#publish_text").val("");
-					   $("#image_img").attr("src","homepage-img/image_0.png");
-					   upload_filename = "null";
-					   upload_img = "null";
-					   $("#image_file").attr("value","");
-					   $("#preview_image").width(null);
-					   $("#preview_image").height(null);
-					   $("#location_img").attr("src","homepage-img/location_0.png");
-					   $("#positionInfo").text("");
-					   isLocation = false;
-		  });
-	  }
-
 
   function forward(id){
 	   $("#back_div").height($(document.body).height());
@@ -122,9 +43,9 @@ function publish(){
    });
    var oldest_message_id = 9999999;
    function pageRefresh(){
-	   $.get("getOriginalMessages?cursor=" + oldest_message_id + "&userId=" + $(".container").id,null,function(response){
+	   $.get("getOriginalMessages?cursor=" + oldest_message_id + "&userId=" + $(".container").attr("id"),null,function(response){
 		   $("#loading_div").css("display","block");
-				   var myMsg = response.myMessages;
+				   var myMsg = response.originalList;
 				   if(myMsg == null || myMsg.length == 0)
 				   {
 					   $("#loading_div").css("display","none");
@@ -148,12 +69,12 @@ function publish(){
 					   }else{
 						   str = str + 'homepage-img/upimg.png';
 					   }
-					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="javascript:void(0);" class="author_name">' + myMsg[i].user.nickname + '</a>:&nbsp;' + myMsg[i].text + '</p>';
+					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="userpage.action?hisId=' + myMsg[i].user.userId + '" class="author_name">' + myMsg[i].user.nickname + '</a>:&nbsp;' + myMsg[i].text + '</p>';
 					   if(myMsg[i].image!=null){
 						   str = str + '<p><div style="margin-left:10px; margin-top:5px;"><img src="' + myMsg[i].image + '" style="width:300px"></div></p>';
 					   }
 					   if(myMsg[i].sourceId!=-1){
-						   str = str + '<p><div class="previous_div"><p class="fltext"><a href="javascript:void(0);" class="author_name">@' + myMsg[i].original.user.nickname + '</a>:&nbsp;' + myMsg[i].original.text + '</p>';
+						   str = str + '<p><div class="previous_div"><p class="fltext"><a href="userpage.action?hisId=' + myMsg[i].original.user.userId + '" class="author_name">@' + myMsg[i].original.user.nickname + '</a>:&nbsp;' + myMsg[i].original.text + '</p>';
 						   if(myMsg[i].original.image!=null){
 							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + myMsg[i].original.image + '" width="300"></div></p>';
 						   }
@@ -175,140 +96,12 @@ function publish(){
 				   }
 		   });
    }
-   
-   
-   
-var isClick=false;
-				$("body").click(function(event){
-					if($("#publish_emotion").css("display")=="block"
-					&&(event.clientX<$("#publish_emotion").offset().left||event.clientX>$("#publish_emotion").offset().left+$("#emotion_button").width()
-					||event.clientY<$("#publish_emotion").offset().top||event.clientY>$("#emotion_button").offset().top+$("#emotion_button").height())){
-						if(!isClick){
-							$("#emotion_img").attr("src","homepage-img/emotion_0.png");
-							$("#publish_emotion").fadeOut(700);
-						} else {
-							isClick = false;
-						}
-					}
-				});
-				$("#emotion_button").click(function(event){
-					$("#publish_emotion").css("left",$("#emotion_button").offset().left);
-					$("#publish_emotion").css("top",$("#emotion_button").offset().top+$("#emotion_button").height());
-					$("#emotion_img").attr("src","homepage-img/emotion_1.png");
-					$("#publish_emotion").fadeIn(700);
-					isClick=true;
-				});
-				$("#publish_emotion").find("a").click(function( event){
-				    var insertCon=$(this).attr("title");
-				    $("#publish_text").insertContent("["+insertCon+"]");
-					$("#emotion_img").attr("src","homepage-img/emotion_0.png");
-					$("#publish_emotion").fadeOut(700);
-				});
-
-
-$("#image_file").change(function(event){
-			$("#publish_image_close").click(function(e) {
-                $("#publish_image").fadeOut(700);
-            });
-			$("#publish_image").css("left",$("#image_button").offset().left);
-			$("#publish_image").css("top",$("#image_button").offset().top+$("#image_button").height());
-			$("#image_img").attr("src","homepage-img/image_1.png");
-			$("#publish_image").fadeIn(700);
-		});
-		$("body").click(function(event){
-					if($("#publish_image").css("display")=="block"
-					&&(event.clientX<$("#publish_image").offset().left||event.clientX>$("#publish_image").offset().left+$("#publish_image").width()
-					||event.clientY<$("#publish_image").offset().top||event.clientY>$("#image_button").offset().top+$("#image_button").height())){
-						$("#publish_image").fadeOut(700);
-					}
-				});
-				
-				
-var isClick = false;
-		var isLocation = false;
-		$("#location_button").click(function(){
-			isClick=true;
-			if(isLocation){
-				$("#location_img").attr("src","homepage-img/location_0.png");
-				$("#positionInfo").text("");
-				isLocation = false;
-			} else {
-				$("#publish_location").css("left",$("#location_button").offset().left);
-				$("#publish_location").css("top",$("#location_button").offset().top+$("#location_button").height());
-				$("#location_img").attr("src","homepage-img/location_1.png");
-				$("#publish_location").fadeIn(700);
-				isLocation = true;
-			}
-		});
-		$("body").click(function(event){
-					if($("#publish_location").css("display")=="block"
-					&&(event.clientX<$("#publish_location").offset().left||event.clientX>$("#publish_location").offset().left+$("#publish_location").width()
-					||event.clientY<$("#publish_location").offset().top||event.clientY>$("#location_button").offset().top+$("#location_button").height())){
-						if(!isClick){
-							$("#publish_location").fadeOut(700);
-						} else {
-							isClick = false;
-						}
-					}
-				});
-			$("#location_button").click(function(e) {
-                if(navigator.geolocation){
-					navigator.geolocation.getCurrentPosition(show_map,handle_error ,null);
-				}
-            });
-			function handle_error(){
-			}
-			function show_map(position) {
-				var coords = position.coords;
-				$("#google_map").attr("src","http://maps.google.com/maps/api/staticmap?center=" + coords.latitude + "," + coords.longitude + "&zoom=12&size=200x200&maptype=roadmap&markers=color:red%7Clabel:A%7C" + coords.latitude + "," + coords.longitude + "&sensor=false");
-				$.get("googlePosition.action?latitude="+coords.latitude+"&longitude="+coords.longitude,null,function(result){
-					var response = JSON.parse(result);
-					document.getElementById("positionInfo").textContent = response.results[0].address_components[1].long_name + ", " + response.results[0].address_components[2].long_name;
-				});
-			}
-			
-			
-			
+	
 function forward_send(){
 				var a=$("#forward_message_id").val();
 				var b=$("#forward_text").val();
 				closing();
-				$.post("forward.action",{"messageid":$("#forward_message_id").val(),"text":$("#forward_text").val(),"upload":"null"},function(result){
-					var str = '<dt class="face"><a href="javascript:void(0);"><img src="';
-					   if(result.lastPost.user.image!=null){
-						   str = str + result.lastPost.user.image;
-					   }else{
-						   str = str + 'homepage-img/upimg.png';
-					   }
-					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="javascript:void(0);" class="author_name">' + result.lastPost.user.nickname + '</a>:&nbsp;' + result.lastPost.text + '</p>';
-					   if(result.lastPost.image!=null){
-						   str = str + '<p><div style="margin-left:10px; margin-top:5px;"><img src="' + result.lastPost.image + '" style="width:300px"></div></p>';
-					   }
-					   if(result.lastPost.sourceId!=-1){
-						   str = str + '<p><div class="previous_div"><p class="fltext"><a href="javascript:void(0);" class="author_name">@' + result.lastPost.original.user.nickname + '</a>:&nbsp;' + result.lastPost.original.text + '</p>';
-						   if(result.lastPost.original.image!=null){
-							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + result.lastPost.original.image + '" width="300"></div></p>';
-						   }
-						   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + result.lastPost.original.messageId + '"  onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + result.lastPost.original.messageId + '" onClick="comment(this.name,false)">Comment</a></span>' + result.lastPost.original.timeDescription + '&nbsp;&nbsp;&nbsp;';
-						   if(result.lastPost.original.position!=null && result.lastPost.original.position!=""){
-							   str = str + 'From ' + result.lastPost.original.position;
-						   }
-						   str = str + '</p><div id="commentlist_pre_' + result.lastPost.original.messageId + '" class="commentlist"></div></div></p>';
-					   }
-					   str = str + '<p class="fltime"><span><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="forward(this.name)">Forward</a><i class="W_vline">&nbsp;|&nbsp;</i><a href="javascript:void(0);" name="' + result.lastPost.messageId + '" onClick="comment(this.name,true)">Comment</a></span>' + result.lastPost.timeDescription + '&nbsp;&nbsp;&nbsp;';
-					   if(result.lastPost.position!=null && result.lastPost.position!=""){
-						   str = str + 'From ' + result.lastPost.position;
-					   }
-					   str = str + '</p><div id="commentlist_' + result.lastPost.messageId + '" class="commentlist"></div></dd>';
-					   var i = document.createElement("dl");
-					   i.className="feed_list";
-					   i.innerHTML=str;
-					   i.id = "message_" + result.lastPost.messageId;
-					   i.style.display = "none";
-					   var mainlist = document.getElementById("mainlist");
-					   mainlist.insertBefore(i,mainlist.firstChild);
-					   $("#" + "message_" + result.lastPost.messageId).fadeIn(1000);
-				});
+				$.post("forward.action",{"messageid":$("#forward_message_id").val(),"text":$("#forward_text").val(),"upload":"null"},function(result){});
 				$("#forward_text").val("");
 			}
 
@@ -325,6 +118,7 @@ function comment(id,isnew){
 	if(isCommentActive) {
 		$("#" + activeComment).slideUp(1000);
 		$("#" + activeComment).html("")
+		document.all.conr.style.height=document.all.conl.offsetHeight+"px";
 		isCommentActive = false;
 		if(elementname == activeComment) {
 			return;
@@ -336,13 +130,14 @@ function comment(id,isnew){
 				var str = '<dl class="commentdl_input"><form><textarea id="comment_submit"></textarea><input type="button" class="comment_button" value="Comment" onClick="handleCommentSubmit()"><div style="clear:right"></div><input type="hidden" name="maxlength" value="140" /></form></dl><div style="clear:left"></div>';
 		myComments = result.comments;
 		for(var i=0;i<myComments.length;i++){
-			str = str + '<dl class="commentdl_list"><dt class="commentdt"><img src="' + myComments[i].user.image + '" style="width:30px; height:30px"/></dt><dd class="commentdd"><p style="margin:0"><a href="javascript:void(0)" class="author_name_comment">@' + myComments[i].user.nickname + '</a>:&nbsp;' + myComments[i].text + '</p><p style="margin:0; text-align:right">' + myComments[i].timeDescription + '</p></dd></dl>';
+			str = str + '<dl class="commentdl_list"><dt class="commentdt"><img src="' + myComments[i].user.image + '" style="width:30px; height:30px"/></dt><dd class="commentdd"><p style="margin:0"><a href="userpage.action?hisId=' + myComments[i].user.userId + '" class="author_name_comment">@' + myComments[i].user.nickname + '</a>:&nbsp;' + myComments[i].text + '</p><p style="margin:0; text-align:right">' + myComments[i].timeDescription + '</p></dd></dl>';
 		}
 		$("#" + elementname).slideUp(1000);
 		$("#" + elementname).html(str);
 		$("#" + elementname).slideDown(1000);
 		isCommentActive = true;
 		activeComment = elementname;
+		document.all.conr.style.height=document.all.conl.offsetHeight+"px";
 		$("#comment_submit").keyup(function(e) {
   		  $("#comment_submit").height($("#comment_submit").scrollTop()+$("#comment_submit").height());
 		});
@@ -361,8 +156,9 @@ function handleCommentSubmit() {
 		i.id = "commentlist_" + newComment.commentId;
 		i.className = "commentdl_list";
 		i.style.display = "none";
-		i.innerHTML = '<dt class="commentdt"><img src="' + newComment.user.image + '" style="width:30px; height:30px"/></dt><dd class="commentdd"><p style="margin:0"><a href="javascript:void(0)" class="author_name_comment">@' + newComment.user.nickname + '</a>:&nbsp;' + newComment.text + '</p><p style="margin:0; text-align:right">' + newComment.timeDescription + '</p></dd>';
+		i.innerHTML = '<dt class="commentdt"><img src="' + newComment.user.image + '" style="width:30px; height:30px"/></dt><dd class="commentdd"><p style="margin:0"><a href="userpage.action?hisId=' + newComment.user.userId + '" class="author_name_comment">@' + newComment.user.nickname + '</a>:&nbsp;' + newComment.text + '</p><p style="margin:0; text-align:right">' + newComment.timeDescription + '</p></dd>';
 		clist.insertBefore(i,clist.childNodes[1]);
 		$("#" + "commentlist_" + newComment.commentId).fadeIn(1000);
+		document.all.conr.style.height=document.all.conl.offsetHeight+"px";
 	});
 }

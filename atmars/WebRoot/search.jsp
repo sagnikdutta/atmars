@@ -159,9 +159,8 @@ li {
 .content .conl {
 	float: left;
 	overflow: hidden;
-	background: #fff;
+	background-color: rgba(255,255,255,0.5);
 	width: 160px;
-	opacity: 0.5;
 	display: block;
 }
 
@@ -499,7 +498,7 @@ li {
 									<img src="<%=((User) list_search.get(i)).getImage()%>" class="item_img" />
 								</dt>
 								<dd>
-									<div class="person_name"><%=((User) list_search.get(i)).getNickname()%></div>
+									<div class="person_name"><a href="userpage?hisId=<%=((User) list_search.get(i)).getUserId()%>"><%=((User) list_search.get(i)).getNickname()%></a></div>
 									<div class="item_content">
 										<ul>
 											<li><strong>Following(<%=((User) list_search.get(i)).getFollowingCount()%>)</strong>

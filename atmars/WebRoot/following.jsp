@@ -159,9 +159,9 @@ li {
 .content .conl {
 	float: left;
 	overflow: hidden;
-	background: #fff;
+	background-color: rgba(255,255,255,0.5);
 	width: 160px;
-	opacity: 0.5;
+	
 	display: block;
 }
 
@@ -212,6 +212,31 @@ li {
 	background: #fff;
 	display: block;
 }
+
+.content .conr .search_box {
+	float: left;
+	overflow: hidden;
+	margin-top: 38px;
+	padding-left: 60px;
+	width: 620px;
+}
+
+.search_more {
+	float: left;
+	margin-top: 2px;
+	padding: 0 9px;
+	padding-bottom: 20px;
+	line-height: 21px;
+	width: 530px;
+	border-bottom: 4px #79c5e9 solid;
+}
+
+.search_more .search_result {
+	float: left;
+	color: #A4A4A4;
+	display: inline;
+}
+
 
 #person_list {
 	float: left;
@@ -356,6 +381,13 @@ li {
 				</div>
 			</div>
 			<div id="conr" class="conr">
+			    <div class="search_box">
+			       
+					<p class="search_more">
+						<span class="search_result">Find <%=list_following.size()%> results</span>
+					</p>
+				</div>
+				<div style="clear:both"></div>
 				<div id="person_list">
 					
 					<%
@@ -370,7 +402,7 @@ li {
 									<img src="<%=((User) list_following.get(i)).getImage()%>" class="item_img" />
 								</dt>
 								<dd>
-									<div class="person_name"><%=((User) list_following.get(i)).getNickname()%></div>
+									<div class="person_name"><a href="userpage?hisId=<%=((User) list_following.get(i)).getUserId()%>"><%=((User) list_following.get(i)).getNickname()%></a></div>
 									<div class="item_content">
 										<ul>
 											<li><strong>Following(<%=((User) list_following.get(i)).getFollowingCount()%>)</strong></li>

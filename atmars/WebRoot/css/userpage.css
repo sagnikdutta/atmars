@@ -152,8 +152,7 @@ li{
 	float:right;
 	overflow:hidden;
 	width:240px;
-	background:#fff;
-	opacity:0.5;
+	background-color:rgba(255, 255, 255, 0.5);
 	display:block;
 }
 
@@ -165,6 +164,7 @@ li{
 
 .person_info dt{
 	float:left;
+	opacity:0.7;
 }
 
 .person_info dd{
@@ -179,6 +179,7 @@ li{
 	margin-top:0;
 	padding-left:10xp;
 	height:50px;
+	opacity:0.7;
 }
 
 .attention ul { 

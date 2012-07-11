@@ -101,7 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
              <dt>
                 <img src="<%=user.getImage() %>" height="50" width="50"/>
              </dt>
-             <dd ><a href="javascript:void(0);" class="name" ><%=user.getNickname() %></a></dd>
+             <dd ><a href="homepage" class="name" ><%=user.getNickname() %></a></dd>
           </dl>
        </div>
        <div class="attention">
@@ -127,7 +127,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </a>
              </li>
              <li>
-                <a href="" style="text-decoration: none !important">
+                <a href="userpage?hisId=<%= user.getUserId()%>" style="text-decoration: none !important">
                 <strong>
                 <div id="posts_amount"><%=user.getPostCount() %></div>
                 </strong>

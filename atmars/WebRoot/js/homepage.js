@@ -66,7 +66,7 @@ function publish(){
 				}else{
 					 str = str + 'homepage-img/upimg.png';
 				 }
-					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="javascript:void(0);" class="author_name">' + result.lastPost.user.nickname + '</a>:&nbsp;' + result.lastPost.text + '</p>';
+					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="userpage.action?hisId=' + result.lastPost.user.userId + '" class="author_name">' + result.lastPost.user.nickname + '</a>:&nbsp;' + result.lastPost.text + '</p>';
 					   if(result.lastPost.image!=null){
 						   str = str + '<p><div style="margin-left:10px; margin-top:5px;"><img src="' + result.lastPost.image + '" style="width:300px"></div></p>';
 					   }
@@ -149,12 +149,12 @@ function publish(){
 					   }else{
 						   str = str + 'homepage-img/upimg.png';
 					   }
-					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="javascript:void(0);" class="author_name">' + myMsg[i].user.nickname + '</a>:&nbsp;' + myMsg[i].text + '</p>';
+					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="userpage.action?hisId=' + myMsg[i].user.userId + '" class="author_name">' + myMsg[i].user.nickname + '</a>:&nbsp;' + myMsg[i].text + '</p>';
 					   if(myMsg[i].image!=null){
 						   str = str + '<p><div style="margin-left:10px; margin-top:5px;"><img src="' + myMsg[i].image + '" style="width:300px"></div></p>';
 					   }
 					   if(myMsg[i].sourceId!=-1){
-						   str = str + '<p><div class="previous_div"><p class="fltext"><a href="javascript:void(0);" class="author_name">@' + myMsg[i].original.user.nickname + '</a>:&nbsp;' + myMsg[i].original.text + '</p>';
+						   str = str + '<p><div class="previous_div"><p class="fltext"><a href="userpage.action?hisId=' + myMsg[i].original.user.userId + '" class="author_name">@' + myMsg[i].original.user.nickname + '</a>:&nbsp;' + myMsg[i].original.text + '</p>';
 						   if(myMsg[i].original.image!=null){
 							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + myMsg[i].original.image + '" width="300"></div></p>';
 						   }
@@ -282,12 +282,12 @@ function forward_send(){
 					   }else{
 						   str = str + 'homepage-img/upimg.png';
 					   }
-					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="javascript:void(0);" class="author_name">' + result.lastPost.user.nickname + '</a>:&nbsp;' + result.lastPost.text + '</p>';
+					   str = str + '" width="50" height="50"></a></dt><dd class="flcontent"><p class="fltext"><a href="userpage.action?hisId=' + result.lastPost.user.userId + '" class="author_name">' + result.lastPost.user.nickname + '</a>:&nbsp;' + result.lastPost.text + '</p>';
 					   if(result.lastPost.image!=null){
 						   str = str + '<p><div style="margin-left:10px; margin-top:5px;"><img src="' + result.lastPost.image + '" style="width:300px"></div></p>';
 					   }
 					   if(result.lastPost.sourceId!=-1){
-						   str = str + '<p><div class="previous_div"><p class="fltext"><a href="javascript:void(0);" class="author_name">@' + result.lastPost.original.user.nickname + '</a>:&nbsp;' + result.lastPost.original.text + '</p>';
+						   str = str + '<p><div class="previous_div"><p class="fltext"><a href="userpage.action?hisId=' + result.lastPost.original.user.userId + '" class="author_name">@' + result.lastPost.original.user.nickname + '</a>:&nbsp;' + result.lastPost.original.text + '</p>';
 						   if(result.lastPost.original.image!=null){
 							   str = str + '<p><div style="margin-left:20px; margin-top:5px"><img src="' + result.lastPost.original.image + '" width="300"></div></p>';
 						   }
@@ -341,7 +341,7 @@ function comment(id,isnew){
 				var str = '<dl class="commentdl_input"><form><textarea id="comment_submit"></textarea><input type="button" class="comment_button" value="Comment" onClick="handleCommentSubmit()"><div style="clear:right"></div><input type="hidden" name="maxlength" value="140" /></form></dl><div style="clear:left"></div>';
 		myComments = result.comments;
 		for(var i=0;i<myComments.length;i++){
-			str = str + '<dl class="commentdl_list"><dt class="commentdt"><img src="' + myComments[i].user.image + '" style="width:30px; height:30px"/></dt><dd class="commentdd"><p style="margin:0"><a href="javascript:void(0)" class="author_name_comment">@' + myComments[i].user.nickname + '</a>:&nbsp;' + myComments[i].text + '</p><p style="margin:0; text-align:right">' + myComments[i].timeDescription + '</p></dd></dl>';
+			str = str + '<dl class="commentdl_list"><dt class="commentdt"><img src="' + myComments[i].user.image + '" style="width:30px; height:30px"/></dt><dd class="commentdd"><p style="margin:0"><a href="userpage.action?hisId=' + myComments[i].user.userId + '" class="author_name_comment">@' + myComments[i].user.nickname + '</a>:&nbsp;' + myComments[i].text + '</p><p style="margin:0; text-align:right">' + myComments[i].timeDescription + '</p></dd></dl>';
 		}
 		$("#" + elementname).slideUp(1000);
 		$("#" + elementname).html(str);
@@ -367,7 +367,7 @@ function handleCommentSubmit() {
 		i.id = "commentlist_" + newComment.commentId;
 		i.className = "commentdl_list";
 		i.style.display = "none";
-		i.innerHTML = '<dt class="commentdt"><img src="' + newComment.user.image + '" style="width:30px; height:30px"/></dt><dd class="commentdd"><p style="margin:0"><a href="javascript:void(0)" class="author_name_comment">@' + newComment.user.nickname + '</a>:&nbsp;' + newComment.text + '</p><p style="margin:0; text-align:right">' + newComment.timeDescription + '</p></dd>';
+		i.innerHTML = '<dt class="commentdt"><img src="' + newComment.user.image + '" style="width:30px; height:30px"/></dt><dd class="commentdd"><p style="margin:0"><a href="userpage.action?hisId=' + newComment.user.userId + '" class="author_name_comment">@' + newComment.user.nickname + '</a>:&nbsp;' + newComment.text + '</p><p style="margin:0; text-align:right">' + newComment.timeDescription + '</p></dd>';
 		clist.insertBefore(i,clist.childNodes[1]);
 		$("#" + "commentlist_" + newComment.commentId).fadeIn(1000);
 		document.all.conr.style.height=document.all.conl.offsetHeight+"px";

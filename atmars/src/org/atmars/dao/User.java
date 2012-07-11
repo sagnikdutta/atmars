@@ -229,5 +229,6 @@ public class User implements java.io.Serializable {
 		this.comments = null;
 		this.favorites = null;
 		this.followsForFollowedId = null;
+		this.password=null;
 	}
 }
