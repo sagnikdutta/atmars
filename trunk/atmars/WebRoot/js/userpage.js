@@ -98,6 +98,9 @@ function Sync(){
    }
 	
 function forward_send(){
+	if($("#forward_text").val()==""){
+		return;
+	}
 				var a=$("#forward_message_id").val();
 				var b=$("#forward_text").val();
 				closing();
@@ -149,6 +152,9 @@ function comment(id,isnew,oldid){
 }
 function handleCommentSubmit() {
 	var commentText = document.getElementById("comment_submit");
+	if(commentText.value==""){
+		return;
+	}
     $.post("sendComment.action",{"messageId":activeCommentMsgId,"commentString":commentText.value},function(result){
 		commentText.value="";
 		var newComment = result._publishedComment;
