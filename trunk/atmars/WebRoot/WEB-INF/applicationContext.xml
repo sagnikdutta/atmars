@@ -11,7 +11,7 @@
 			value="jdbc:mysql://localhost:3306/marsdb?charset=utf-8">
 		</property>
 		<property name="username" value="root"></property>
-		<property name="password" value="1234"></property>
+		<property name="password" value="qazlys"></property>
 	</bean>
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
