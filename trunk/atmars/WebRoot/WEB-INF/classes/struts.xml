@@ -177,7 +177,12 @@
 		<action name="userpage" class="org.atmars.action.ShowJspPagesAction" method="ShowUserPage">
 			<result name="success">userpage.jsp</result>
 		</action>
-		<action name="mobileSendMessage" class="org.atmars.action.MobileSendMessageAction">
+		<action name="MobileGetMyMessages" class="org.atmars.action.MobileGetMyMessagesAction">
+			<result name="success" type="json">
+			<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+		<action name="MobileSendMessage" class="org.atmars.action.MobileSendMessageAction">
 			<result name="success" type="json">
 				<param name="excludeProperties">
 					userId,
@@ -188,7 +193,7 @@
 				<param name="excludeNullProperties">true</param>
 			</result>
 		</action>
-		<action name="mobileLogin" class="org.atmars.action.MobileLoginAction">
+		<action name="MobileLogin" class="org.atmars.action.MobileLoginAction">
 			<result name="success" type="json">
 			<param name="excludeNullProperties">true</param>
 			</result>
