@@ -272,6 +272,7 @@
 		var email=document.getElementById("email");
 		var password=document.getElementById("password");
 		var passwordconfirm=document.getElementById("passwordconfirm");
+		var nickname=document.getElementById("nickname");
 		if(emailIsRight==0){
 			email.focus();
 			return;
@@ -289,6 +290,6 @@
 			return;
 		}
 		else{
-			 myform.focus();
+			 myform.submit();
 		}
 	}
