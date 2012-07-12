@@ -59,6 +59,9 @@ function Sync(){
             });
 			
 function publish(){
+	if($("#publish_text").val()==""){
+		return;
+	}
 		  $.post("publish.action",{"messageid":"-1","text":$("#publish_text").val(),"position":$("#positionInfo").text(),"upload":upload_img,"uploadFileName":upload_filename},function(result){
 			  var str = '<dt class="face"><a href="javascript:void(0);"><img src="';
 			  if(result.lastPost.user.image!=null){
@@ -276,6 +279,9 @@ var isClick = false;
 			
 			
 function forward_send(){
+	if($("#forward_text").val()==""){
+		return;
+	}
 				var a=$("#forward_message_id").val();
 				var b=$("#forward_text").val();
 				closing();
@@ -368,6 +374,9 @@ function comment(id,isnew,oldid){
 }
 function handleCommentSubmit() {
 	var commentText = document.getElementById("comment_submit");
+	if(commentText.value==""){
+		return;
+	}
     $.post("sendComment.action",{"messageId":activeCommentMsgId,"commentString":commentText.value},function(result){
 		commentText.value="";
 		var newComment = result._publishedComment;
