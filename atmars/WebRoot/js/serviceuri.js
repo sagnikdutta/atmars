@@ -1,1 +1,0 @@
-var serviceuri = "http://cloudzfy-pc:8080/atmars/";
