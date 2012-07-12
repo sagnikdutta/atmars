@@ -32,13 +32,13 @@
       </tr>
     </table>
 
-    <s:form name="form1" method="post" action="performRegister" enctype="multipart/form-data">
+    <s:form id="myform" name="form1" method="post" action="performRegister" enctype="multipart/form-data">
       
       <table width="650" height="190" border="0" class="table" >
         <tr>
           <td width="97" height="60" align="left" valign="middle" style="color:#666666">Email</td>
           <td width="321">
-            <input name="email" type="text" class="textinp" id="email" size="30" maxlength="20" onBlur="email_text_onblur()" onFocus="email_text_onfocus()" style="color:#333333">
+            <input name="email" type="text" class="textinp" id="email" size="80" maxlength="20" onBlur="email_text_onblur()" onFocus="email_text_onfocus()" style="color:#333333">
           </td>
           <td width="218"><div id="proemail" class="prompt" ></div> </td>
         </tr>
