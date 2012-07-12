@@ -1,4 +1,8 @@
 
+    var emailIsRight=0;
+    var nicknameIsRight=0;
+    var passwordIsRight=0;
+    var passwordcIsRight=0;
 
 	function handleFiles(files){
 		var file = files[0];  
@@ -20,6 +24,7 @@
 		proemail.innerHTML="Use your Email as login account E.g:example@example.com";
 		proemail.style.display="block";
 		email.placeholder="";
+		emailIsRight=0;
 	}
 	
 	function checkemail(str){
@@ -48,6 +53,7 @@
 						 success.className="successimg";
 						 success.src="register-img/success.png";
 						 proemail.appendChild(success);
+						 emailIsRight=1;
 					 }
 					 else{
 						 proemail.className="prompt_wrong";
@@ -73,7 +79,7 @@
 			proemail.style.color="#FF0000";
 			proemail.style.paddingTop="10px";
 			proemail.style.paddingBottom="10px";
-			proemail.innerHTML="Enter your currect email";
+			proemail.innerHTML="Enter your correct email";
 		}
 		proemail.style.display="block";
 	}
@@ -86,6 +92,7 @@
 		propassword.style.paddingBottom="0px";
 		propassword.innerHTML="This should be 6-16 characters (letters, numbers or symbols)";
 		propassword.style.display="block";
+		passwordIsRight=0;
 	}
 	
 	function password_text_onblur(){
@@ -115,6 +122,7 @@
 			    propasswordc.style.paddingTop="0px";
 		        propasswordc.style.paddingBottom="0px";
 		    	propasswordc.innerHTML="Two passwords do not match.";
+		    	passwordcIsRight=0;
 			}
 			propassword.className="prompt_right";
 		    propassword.innerHTML="";
@@ -122,6 +130,7 @@
 			success.className="successimg";
 			success.src="register-img/success.png";
 			propassword.appendChild(success);
+			passwordIsRight=1;
 		}
 		else if(passwordc.value==password.value)
 		{
@@ -140,6 +149,8 @@
 			csuccess.className="successimg";
 			csuccess.src="register-img/success.png";
 			propasswordc.appendChild(csuccess);
+			passwordIsRight=1;
+			passwordcIsRight=1;
 		}
 		propassword.style.display="block";
 	}
@@ -152,6 +163,7 @@
 		propasswordc.style.paddingBottom="0px";
 		propasswordc.innerHTML="This should be 6-16 characters (letters, numbers or symbols)";
 		propasswordc.style.display="block";
+		passwordcIsRight=0;
 	}
 	
 	function passwordc_text_onblur(){
@@ -186,6 +198,7 @@
 			success.className="successimg";
 			success.src="register-img/success.png";
 			propasswordc.appendChild(success);
+			passwordcIsRight=1;
 		}
 		propasswordc.style.display="block";
 	}
@@ -198,6 +211,7 @@
 		pronickname.style.paddingBottom="0px";
 		pronickname.innerHTML="You may enter 4-20 characters";
 		pronickname.style.display="block";
+		nacknameIsRight=0;
 	}
 	
 	function nickname_text_onblur(){
@@ -230,6 +244,7 @@
 						success.className="successimg";
 						success.src="register-img/success.png";
 						pronickname.appendChild(success);
+						nicknameIsRight=1;
 						}
 						else{
 						pronickname.className="prompt_wrong";
@@ -252,24 +267,28 @@
 		pronickname.style.display="block";
 	}
 	
-	function checkform(myform){
-		if(checkemail(myform.email.value)==false){
-			myform.email.focus();
+	function checkform(){
+		var myform=document.getElementById("myform");
+		var email=document.getElementById("email");
+		var password=document.getElementById("password");
+		var passwordconfirm=document.getElementById("passwordconfirm");
+		if(emailIsRight==0){
+			email.focus();
 			return;
 		}
-		else if(myform.password.value.length<6 || myform.password.value.length>16){
-			myform.password.focus();
+		else if(passwordIsRight==0){
+			password.focus();
 			return;
 		}
-		else if(myform.passwordconfirm.value.length<6 || myform.password.value.length>16 || myform.password.value!=myform.passwordconfirm.value){
-			myform.passwordconfirm.focus();
+		else if(passwordcIsRight==0){
+			passwordc.focus();
 			return;
 		}
-		else if(myform.nickname.value.length<4 || myform.nickname.value.length>16){
-			myform.nickname.focus();
+		else if(nicknameIsRight==0){
+			nickname.focus();
 			return;
 		}
 		else{
-			 myform.submit();
+			 myform.focus();
 		}
 	}
