@@ -1,4 +1,6 @@
+#summary Screenshot of @Mars Micro Blog
 #labels Phase-Support
+
 = Screenshot =
  * Index
 <img src="http://atmars.googlecode.com/svn/wiki/Screenshot/Screenshot-1.jpg" width="700">
