@@ -1,0 +1,14 @@
+#labels Phase-Support
+= Screenshot =
+ * Index
+<img src="http://atmars.googlecode.com/svn/wiki/Screenshot/Screenshot-1.jpg" width="700">
+ * Homepage
+<img src="http://atmars.googlecode.com/svn/wiki/Screenshot/Screenshot-2.jpg" width="700">
+ * Search Users
+<img src="http://atmars.googlecode.com/svn/wiki/Screenshot/Screenshot-3.jpg" width="700">
+ * Publish a Message
+<img src="http://atmars.googlecode.com/svn/wiki/Screenshot/Screenshot-4.jpg" width="700">
+ * Forward a Message
+<img src="http://atmars.googlecode.com/svn/wiki/Screenshot/Screenshot-5.jpg" width="700">
+ * Comment a Message
+<img src="http://atmars.googlecode.com/svn/wiki/Screenshot/Screenshot-6.jpg" width="700">
