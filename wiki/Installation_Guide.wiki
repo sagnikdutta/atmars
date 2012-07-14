@@ -1,3 +1,4 @@
+#summary Installation Guide of @Mars Micro Blog
 #labels Phase-Deploy
 
  * [#Environment_Requirement Environment Requirement]
