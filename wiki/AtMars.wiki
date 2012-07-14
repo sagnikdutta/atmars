@@ -1,5 +1,5 @@
+#summary Introduction of @Mars Micro Blog.
 #labels microblog
-#Introduction of @Mars Micro Blog.
 
 = Introduction =
 
