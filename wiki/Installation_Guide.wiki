@@ -1,5 +1,5 @@
 #summary Installation Guide of @Mars Micro Blog
-#labels Phase-Deploy
+#labels Phase-Deploy,Featured
 
  * [#Environment_Requirement Environment Requirement]
  * [#Building_the_source_code Building the source code]
